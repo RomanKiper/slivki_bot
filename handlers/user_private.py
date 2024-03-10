@@ -1,15 +1,19 @@
 from aiogram import types, Router, F
 from aiogram.filters import CommandStart, Command, or_f
+from filters.chat_types import ChatTypeFilter
 
 from lexicon.lexicon import LEXICON_HI
+from keyboards.reply.reply_main_menu import start_kb, del_kb
 
 user_private_router = Router()
+user_private_router.message.filter(ChatTypeFilter(['private']))
 
 
 @user_private_router.message(F.text.lower().in_({'старт', 'начать', "start"}))
 @user_private_router.message(CommandStart())
 async def start_cmd(message: types.Message) -> None:
-    await message.answer(text="Это была команда старт")
+    await message.answer(text="Это была команда старт", reply_markup=start_kb)
+
 
 
 @user_private_router.message(or_f(Command('main_menu'), (F.text.lower().in_({'main_menu', 'главное меню'}))))
@@ -59,8 +63,5 @@ async def send_photo_id(message: types.Message):
     await message.answer(f"ID фотографии: {photo_id}")
 
 
-@user_private_router.message()
-async def echo(message: types.Message) -> None:
-    await message.answer(message.text)
 
 
