@@ -1,6 +1,9 @@
 from aiogram import types, Router, F
 from aiogram.filters import CommandStart, Command, or_f
+from aiogram.types import Message
+
 from filters.chat_types import ChatTypeFilter
+from keyboards.inline.inline_first_menu import create_inline_kb_main_menu
 
 from lexicon.lexicon import LEXICON_HI
 from keyboards.reply.reply_main_menu import start_kb, del_kb
@@ -17,8 +20,15 @@ async def start_cmd(message: types.Message) -> None:
 
 
 @user_private_router.message(or_f(Command('main_menu'), (F.text.lower().in_({'main_menu', 'главное меню'}))))
-async def menu_cmd(message: types.Message):
-    await message.answer('This is menu.')
+async def get_main_menu(message: Message):
+    keyboard = create_inline_kb_main_menu(2, 'btn_main_menu_1', 'btn_main_menu_3', 'btn_main_menu_2',
+                                          'btn_main_menu_4',
+                                          'btn_contract_links', 'download_app', 'btn_main_menu_5')
+    await message.answer(
+        text='В данном блоке ты можешь получить базовую инфрмацию о компании.',
+        reply_markup=keyboard
+    )
+    await message.delete()
 
 
 @user_private_router.message(F.text.lower().in_({'о нас', 'описание', "about"}))
@@ -31,12 +41,6 @@ async def about_cmd(message: types.Message):
 @user_private_router.message(Command('our_media'))
 async def our_media_cmd(message: types.Message):
     await message.answer("Links for our media.")
-
-
-@user_private_router.message(F.text.lower().in_({'работникам', 'сотрудникам', "employee"}))
-@user_private_router.message(Command('employee'))
-async def employee_cmd(message: types.Message):
-    await message.answer("Block for employee.")
 
 
 @user_private_router.message(F.text.lower().in_({'помощь', "help"}))
