@@ -27,9 +27,10 @@ bot = Bot(token=config.tg_bot.token, parse_mode="HTML")
 dp = Dispatcher()
 
 dp.include_router(user_private_router)
+dp.include_router(admin_router)
 dp.include_router(employee_router)
 dp.include_router(user_group_router)
-dp.include_router(admin_router)
+
 
 
 async def on_startup(bot):
