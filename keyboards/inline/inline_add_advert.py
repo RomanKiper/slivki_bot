@@ -4,7 +4,7 @@ inline_product_add_dell_kb = InlineKeyboardMarkup(inline_keyboard=[
     [
         InlineKeyboardButton(
             text="Добавить предложение",
-            callback_data='add'
+            callback_data='add_product'
         )
     ],
     [
@@ -21,7 +21,7 @@ inline_product_add_dell_kb = InlineKeyboardMarkup(inline_keyboard=[
     ],
     [
         InlineKeyboardButton(
-            text="Назад в меню",
+            text="Все товары",
             callback_data='back_to_menu'
         )
     ],

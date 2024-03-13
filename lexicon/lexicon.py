@@ -110,7 +110,7 @@ LEXICON_btn_employee_menu: dict[str, str] = {
     'tables_links': 'Рабочие таблицы',
     'work_links': 'Рабочие ссылки',
     'offer_online': 'Создать КП',
-    'add_advertising': 'Добавить что-то',
+    'admin': 'Админка',
 }
 
 LEXICON_btn_price_statistic: dict[str, str] = {

@@ -16,47 +16,17 @@ lst_admin_ids = config.tg_bot.id_admins
 @employee_router.message(F.text.lower().in_({'работникам', 'сотрудникам', "employee"}))
 @employee_router.message(Command('employee'))
 async def get_main_menu(message: Message):
-    # if message.from_user.id in lst_admin_ids:
-    keyboard = create_inline_kb_employee_meny(1, 'tables_links', 'work_links', 'offer_online', 'add_advertising')
-
+    keyboard = create_inline_kb_employee_meny(1, 'tables_links', 'work_links', 'offer_online', 'admin')
     await message.answer(
         text='У вас права работника компании.'
              ' Пользуйтесь возможнстями бота и пишите ваши рекомендации по усовершенствованию бота.',
         reply_markup=keyboard
     )
     await message.delete()
-    # else:
-    #     await message.answer(text="Нет прав доступа. Запросите права у администатора.")
-    #     await message.delete()
 
 
-
-
-#
-# @router.callback_query(F.data=='employee')
-# async def get_main_menu_2(callback: types.CallbackQuery):
-#     # if callback.from_user.id in lst_admin_ids:
-#         await callback.message.answer(
-#             text='У вас права работника компании.'
-#                  ' Пользуйтесь возможнстями бота и пишите ваши рекомендации по усовершенствованию бота.',
-#             reply_markup=inline_kb_employee
-#         )
-#         await callback.message.delete()
-#     # else:
-#     #     await callback.message.answer(text="Нет прав доступа. Запросите права у администатора.")
-#     #     await callback.message.delete()
-#
-#
-#
-# @router.callback_query(F.data == 'school')
+## @router.callback_query(F.data == 'school')
 # async def get_school_document(callback: types.CallbackQuery):
-#     await callback.message.answer(
-#         text='Данный раздел находится в разработке.'
-#     )
-#
-#
-# @router.callback_query(F.data == 'improvements')
-# async def get_improvements(callback: types.CallbackQuery):
 #     await callback.message.answer(
 #         text='Данный раздел находится в разработке.'
 #     )

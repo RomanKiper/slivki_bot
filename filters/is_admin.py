@@ -27,17 +27,3 @@ class IsAdminMsg(Filter):
                 return True
             # else:
             #     await callback_query.message.answer(text="Нет прав")
-
-
-# admin_router.message(Command("add"), F.text | F.command)
-# @admin_router.callback_query(lambda c: c.data.startswith(""))
-# async def start_handler(message_or_callback: types.Union[types.Message, CallbackQuery]):
-#     if isinstance(message_or_callback, types.Message):
-#         # Если это сообщение
-#         message = message_or_callback
-#         await message.answer(text="👇👇Добавте товар👇👇", reply_markup=inline_product_add_dell_kb)
-#     elif isinstance(message_or_callback, CallbackQuery):
-#         # Если это колбэк-запрос
-#         callback_query = message_or_callback
-#         await callback_query.message.answer(text="👇👇Добавте товар👇👇", reply_markup=inline_product_add_dell_kb)
-#
