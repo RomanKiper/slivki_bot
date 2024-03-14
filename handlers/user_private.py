@@ -60,11 +60,12 @@ async def delivery_cmd(message: types.Message):
     await message.answer("Фильтр по вариантам доставки.")
 
 
-@user_private_router.message(F.photo)
-async def send_photo_id(message: types.Message):
-    await message.send_copy(chat_id=message.chat.id)
-    photo_id = message.photo[0].file_id
-    await message.answer(f"ID фотографии: {photo_id}")
+#Хэндлер отлавливать id фото. Не раскоменчивать. т.к. перехватывает данные для fsm
+# @user_private_router.message(F.photo)
+# async def send_photo_id(message: types.Message):
+#     await message.send_copy(chat_id=message.chat.id)
+#     photo_id = message.photo[0].file_id
+#     await message.answer(f"ID фотографии: {photo_id}")
 
 
 
