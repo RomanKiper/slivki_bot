@@ -4,15 +4,17 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from filters.chat_types import ChatTypeFilter
-from keyboards.inline.inline_add_advert import inline_product_add_dell_kb
+from keyboards.inline.inline_add_product import inline_product_add_dell_kb
 from filters.is_admin import IsAdminMsg
+from database.orm_query import orm_add_product, orm_get_products, orm_delete_product, \
+    orm_update_product, orm_get_product
 
 admin_router = Router()
 admin_router.message.filter(ChatTypeFilter(['private']), IsAdminMsg())
 admin_router.callback_query.filter(IsAdminMsg())
-
-user_dict = {}
 
 
 @admin_router.message(Command("admin"), F.text| F.command)
@@ -21,32 +23,24 @@ async def admin_handler(message_or_callback: types.Union[types.Message, Callback
     if isinstance(message_or_callback, types.Message):
         # Если это сообщение
         message = message_or_callback
-        await message.answer(text="👇👇Добавте товар👇👇", reply_markup=inline_product_add_dell_kb)
+        await message.answer(text="Добавте товар👇", reply_markup=inline_product_add_dell_kb)
     elif isinstance(message_or_callback, CallbackQuery):
         # Если это колбэк-запрос
         callback_query = message_or_callback
-        await callback_query.message.answer(text="👇👇Добавте товар👇👇", reply_markup=inline_product_add_dell_kb)
+        await callback_query.message.answer(text="Добавте товар👇", reply_markup=inline_product_add_dell_kb)
 
 
-from aiogram import F, Router, types
-from aiogram.filters import Command, StateFilter
-from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import State, StatesGroup
+@admin_router.callback_query(F.data == 'all_products_list')
+async def product_list_all(callback: types.CallbackQuery, session: AsyncSession):
+    for product in await orm_get_products(session):
+        await callback.message.answer_photo(
+            product.image,
+            caption=f"<strong>{product.name}</strong>\n"
+                    f"{product.description}\n"
+                    f"Стоимость: {round(product.price, 2)}",
+        )
+    await callback.message.answer("Ок, вот список предложений.")
 
-
-@admin_router.message(F.text == "Я так, просто посмотреть зашел")
-async def starring_at_product(message: types.Message):
-    await message.answer("ОК, вот список товаров")
-
-
-@admin_router.message(F.text == "Изменить товар")
-async def change_product(message: types.Message):
-    await message.answer("ОК, вот список товаров")
-
-
-@admin_router.message(F.text == "Удалить товар")
-async def delete_product(message: types.Message):
-    await message.answer("Выберите товар(ы) для удаления")
 
 
 # Код ниже для машины состояний (FSM)
@@ -67,7 +61,6 @@ class AddProduct(StatesGroup):
 
 @admin_router.callback_query(StateFilter(None), F.data == 'add_product')
 # Становимся в состояние ожидания ввода name
-
 async def add_product(callback: types.CallbackQuery, state: FSMContext):
     await callback.message.answer("Введите название товара")
     await callback.message.delete()
@@ -162,14 +155,20 @@ async def add_price2(message: types.Message, state: FSMContext):
 
 
 # Ловим данные для состояние image и потом выходим из состояний
+# В любом из обработчиков мы можем обраиться к session, т.к. передали сессию в main функцию.
 @admin_router.message(AddProduct.image, F.photo)
-async def add_image(message: types.Message, state: FSMContext):
+async def add_image(message: types.Message, state: FSMContext, session: AsyncSession):
     await state.update_data(image=message.photo[-1].file_id)
-    await message.answer("Товар добавлен", reply_markup=inline_product_add_dell_kb)
     data = await state.get_data()
-    await message.answer(str(data))
-    await state.clear()
+    try:
+        await message.answer("Товар добавлен", reply_markup=inline_product_add_dell_kb)
+        await orm_add_product(session, data)
+        await state.clear()
 
+    except Exception as e:
+        await message.answer(
+            f"Ошибка: \n{str(e)}\nОбратись к прогеру. Имей в виду, что это не бесплатно.", reply_markup=inline_product_add_dell_kb
+        )
 
 
 @admin_router.message(AddProduct.image)
