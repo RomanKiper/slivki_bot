@@ -53,7 +53,7 @@ async def main():
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
 
-    dp.update.middleware(DataBaseSession(session_pool=session_maker))
+    dp.update.middleware(DataBaseSession(session_pool=session_maker))   #сессия на все хэндлеры
     await bot.send_message(config.tg_bot.id_admin, text='Бот запущен!')
     await set_main_menu(bot)
     await bot.delete_webhook(drop_pending_updates=True)
