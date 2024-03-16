@@ -17,7 +17,7 @@ from handlers.admin_add_product import admin_router
 from keyboards.main_menu import set_main_menu
 from middlewares.db import DataBaseSession
 
-ALLOWED_UPDATES = ['message, edited_message']
+# ALLOWED_UPDATES = ['message', 'edited_message', 'callback_query']
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +57,6 @@ async def main():
     await bot.send_message(config.tg_bot.id_admin, text='Бот запущен!')
     await set_main_menu(bot)
     await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot, allowed_updates=ALLOWED_UPDATES)
+    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
 asyncio.run(main())

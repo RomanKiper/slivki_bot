@@ -11,6 +11,7 @@ from keyboards.inline.inline_add_product import inline_product_add_dell_kb
 from filters.is_admin import IsAdminMsg
 from database.orm_query import orm_add_product, orm_get_products, orm_delete_product, \
     orm_update_product, orm_get_product
+from keyboards.inline.inline_add_product import get_callback_btns
 
 admin_router = Router()
 admin_router.message.filter(ChatTypeFilter(['private']), IsAdminMsg())
@@ -38,9 +39,22 @@ async def product_list_all(callback: types.CallbackQuery, session: AsyncSession)
             caption=f"<strong>{product.name}</strong>\n"
                     f"{product.description}\n"
                     f"Стоимость: {round(product.price, 2)}",
+            reply_markup=get_callback_btns(btns={
+                'Удалить': f"delete_{product.id}",
+                'Изменить': f"change_{product.id}",
+            })
         )
     await callback.message.answer("Ок, вот список предложений.")
 
+
+@admin_router.callback_query(F.data.startswith('delete_'))
+async def delete_product(callback: types.CallbackQuery, session: AsyncSession):
+
+    product_id = callback.data.split("_")[-1]
+    await orm_delete_product(session, int(product_id))
+
+    await callback.answer('Предложение удалено.')
+    await callback.message.answer('Предложение удалено.')
 
 
 # Код ниже для машины состояний (FSM)
