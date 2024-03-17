@@ -22,7 +22,7 @@ async def orm_get_products(session: AsyncSession):
 
 async def orm_get_product(session: AsyncSession, product_id: int):
     query = select(Product).where(Product.id == product_id)
-    result = await session.esxecute(query)
+    result = await session.execute(query)
     return result.scalar()
 
 
@@ -38,5 +38,5 @@ async def orm_update_product(session: AsyncSession, product_id: int, data):
 
 async def orm_delete_product(session: AsyncSession, product_id: int):
     query = delete(Product).where(Product.id == product_id)
-    await session.esxecute(query)
+    await session.execute(query)
     await session.commit()
