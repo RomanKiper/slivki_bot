@@ -22,6 +22,7 @@ class AddProduct(StatesGroup):
     # Шаги состояний
     name = State()
     description = State()
+    category = State()
     price = State()
     image = State()
 
