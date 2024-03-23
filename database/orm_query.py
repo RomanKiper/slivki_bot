@@ -17,8 +17,8 @@ async def orm_add_product(session: AsyncSession(), data: dict):
     await session.commit()
 
 
-async def orm_get_products(session: AsyncSession, category_id):
-    query = select(Product).where(Product.category_id == int(category_id))
+async def orm_get_products(session: AsyncSession):
+    query = select(Product)
     result = await session.execute(query)
     return result.scalars().all()
 

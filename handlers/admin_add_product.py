@@ -52,9 +52,9 @@ async def admin_handler(message_or_callback: types.Union[types.Message, Callback
 
 
 @admin_router.callback_query(F.data == 'all_products_list')
-async def starring_at_product(message: types.Message, session: AsyncSession):
+async def starring_at_product(callback: types.CallbackQuery, session: AsyncSession):
     for product in await orm_get_products(session):
-        await message.answer_photo(
+        await callback.message.answer_photo(
             product.image,
             caption=f"<strong>{product.name}\
                     </strong>\n{product.description}\nСтоимость: {round(product.price, 2)}",
@@ -65,7 +65,7 @@ async def starring_at_product(message: types.Message, session: AsyncSession):
                 }
             ),
         )
-    await message.answer("ОК, вот список товаров ⏫")
+    await callback.message.answer("ОК, вот список товаров ⏫")
 
 
 @admin_router.callback_query(F.data.startswith("delete_"))
