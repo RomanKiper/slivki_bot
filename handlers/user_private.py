@@ -1,7 +1,9 @@
 from aiogram import types, Router, F
 from aiogram.filters import CommandStart, Command, or_f
 from aiogram.types import Message
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from database.orm_query import orm_get_products
 from filters.chat_types import ChatTypeFilter
 from keyboards.inline.inline_first_menu import create_inline_kb_main_menu
 
@@ -58,6 +60,19 @@ async def hi_cmd(message: types.Message):
 @user_private_router.message(Command("delivery"))
 async def delivery_cmd(message: types.Message):
     await message.answer("Фильтр по вариантам доставки.")
+
+
+
+@user_private_router.callback_query(F.data == 'products_menu')
+async def starring_at_product(callback: types.CallbackQuery, session: AsyncSession):
+    for product in await orm_get_products(session):
+        await callback.message.answer_photo(
+            product.image,
+            caption=f"<strong>{product.name}\
+                    </strong>\n{product.description}\nСтоимость: {round(product.price, 2)}",
+
+        )
+    await callback.message.answer("ОК, вот список товаров ⏫")
 
 
 #Хэндлер отлавливать id фото. Не раскоменчивать. т.к. перехватывает данные для fsm

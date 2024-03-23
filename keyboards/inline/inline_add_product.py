@@ -13,6 +13,12 @@ inline_product_add_dell_kb = InlineKeyboardMarkup(inline_keyboard=[
             callback_data='all_products_list'
         )
     ],
+    [
+        InlineKeyboardButton(
+            text="Товары",
+            callback_data='products_menu'
+        )
+    ],
 ])
 
 # клавиатрура в админке для формирования инлайновых кнопок
