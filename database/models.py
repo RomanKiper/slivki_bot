@@ -32,9 +32,9 @@ class Product(Base):
     description: Mapped[str] = mapped_column(Text)
     price: Mapped[float] = mapped_column(Numeric(6,2), nullable=False)
     image: Mapped[str] = mapped_column(String(150))
-    category_id: Mapped[int] = mapped_column(ForeignKey('category.id', ondelete='CASCADE'), nullable=False)
+    # category_id: Mapped[int] = mapped_column(ForeignKey('category.id', ondelete='CASCADE'), nullable=False)
 
-    category: Mapped['Category'] = relationship(backref='product')
+    # category: Mapped['Category'] = relationship(backref='product')
 
 
 

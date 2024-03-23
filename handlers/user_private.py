@@ -6,7 +6,7 @@ from filters.chat_types import ChatTypeFilter
 from keyboards.inline.inline_first_menu import create_inline_kb_main_menu
 
 from lexicon.lexicon import LEXICON_HI
-from keyboards.reply.reply_main_menu import start_kb
+
 
 user_private_router = Router()
 user_private_router.message.filter(ChatTypeFilter(['private']))
@@ -15,7 +15,7 @@ user_private_router.message.filter(ChatTypeFilter(['private']))
 @user_private_router.message(F.text.lower().in_({'старт', 'начать', "start"}))
 @user_private_router.message(CommandStart())
 async def start_cmd(message: types.Message) -> None:
-    await message.answer(text="Это была команда старт", reply_markup=start_kb)
+    await message.answer(text="Это была команда старт")
 
 
 
