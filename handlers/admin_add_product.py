@@ -10,7 +10,7 @@ from filters.chat_types import ChatTypeFilter
 from keyboards.inline.inline_add_product import inline_product_add_dell_kb
 from filters.is_admin import IsAdminMsg
 from database.orm_query import orm_add_product, orm_get_products, orm_delete_product, \
-    orm_update_product, orm_get_product, orm_get_categories
+    orm_update_product, orm_get_product, orm_get_categories, orm_change_banner_image, orm_get_info_pages
 from keyboards.inline.inline_add_product import get_callback_btns
 
 admin_router = Router()
@@ -50,9 +50,18 @@ async def admin_handler(message_or_callback: types.Union[types.Message, Callback
         callback_query = message_or_callback
         await callback_query.message.answer(text="Добавте товар👇", reply_markup=inline_product_add_dell_kb)
 
+
+@admin_router.callback_query(F.data == 'products_list')
+async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
+    categories = await orm_get_categories(session)
+    btns = {category.name : f'category_{category.id}' for category in categories}
+    await callback.message.answer("Выберите категорию", reply_markup=get_callback_btns(btns=btns))
+
+
 @admin_router.callback_query(F.data.startswith('category_'))
 async def starring_at_product(callback: types.CallbackQuery, session: AsyncSession):
-    for product in await orm_get_products(session):
+    category_id = callback.data.split('_')[-1]
+    for product in await orm_get_products(session, int(category_id)):
         await callback.message.answer_photo(
             product.image,
             caption=f"<strong>{product.name}\
@@ -61,9 +70,11 @@ async def starring_at_product(callback: types.CallbackQuery, session: AsyncSessi
                 btns={
                     "Удалить": f"delete_{product.id}",
                     "Изменить": f"change_{product.id}",
-                }
+                },
+                sizes=(2,)
             ),
         )
+    await callback.answer()
     await callback.message.answer("ОК, вот список товаров ⏫")
 
 
@@ -241,7 +252,7 @@ async def add_image(message: types.Message, state: FSMContext, session: AsyncSes
     elif message.photo:
         await state.update_data(image=message.photo[-1].file_id)
     else:
-        await message.answer("Отправьте фото пищи")
+        await message.answer("Отправьте фото предложения!")
         return
     data = await state.get_data()
     try:
@@ -265,3 +276,39 @@ async def add_image(message: types.Message, state: FSMContext, session: AsyncSes
 @admin_router.message(AddProduct.image)
 async def add_image2(message: types.Message, state: FSMContext):
     await message.answer("Отправьте фото пищи")
+
+
+################# Микро FSM для загрузки/изменения баннеров ############################
+
+class AddBanner(StatesGroup):
+    image = State()
+
+# Отправляем перечень информационных страниц бота и становимся в состояние отправки photo
+@admin_router.callback_query(StateFilter(None), F.data == 'add_change_banner')
+async def add_image2(callback: types.CallbackQuery, state: FSMContext, session: AsyncSession):
+    pages_names = [page.name for page in await orm_get_info_pages(session)]
+    await callback.message.answer(f"Отправьте фото баннера.\nВ описании укажите для какой страницы:\
+                         \n{', '.join(pages_names)}")
+    await state.set_state(AddBanner.image)
+
+# Добавляем/изменяем изображение в таблице (там уже есть записанные страницы по именам:
+# main, catalog, cart(для пустой корзины), about, payment, shipping
+@admin_router.message(AddBanner.image, F.photo)
+async def add_banner(message: types.Message, state: FSMContext, session: AsyncSession):
+    image_id = message.photo[-1].file_id
+    for_page = message.caption.strip()
+    pages_names = [page.name for page in await orm_get_info_pages(session)]
+    if for_page not in pages_names:
+        await message.answer(f"Введите нормальное название страницы, например:\
+                         \n{', '.join(pages_names)}")
+        return
+    await orm_change_banner_image(session, for_page, image_id,)
+    await message.answer("Баннер добавлен/изменен.")
+    await state.clear()
+
+# ловим некоррекный ввод
+@admin_router.message(AddBanner.image)
+async def add_banner2(message: types.Message, state: FSMContext):
+    await message.answer("Отправьте фото баннера или отмена")
+
+#######################################################################################

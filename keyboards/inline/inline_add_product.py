@@ -8,16 +8,16 @@ inline_product_add_dell_kb = InlineKeyboardMarkup(inline_keyboard=[
             text="Добавить новое",
             callback_data='add_product'
         ),
-        InlineKeyboardButton(
-            text="Все предложения",
-            callback_data='category_'
-        )
     ],
     [
         InlineKeyboardButton(
             text="Товары",
-            callback_data='products_menu'
-        )
+            callback_data='products_list'
+        ),
+        InlineKeyboardButton(
+            text="Добав/измен.баннер",
+            callback_data='add_change_banner'
+        ),
     ],
 ])
 

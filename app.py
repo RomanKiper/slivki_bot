@@ -36,7 +36,7 @@ dp.include_router(user_group_router)
 
 async def on_startup(bot):
 
-    await drop_db()
+    # await drop_db()
 
     await create_db()
 

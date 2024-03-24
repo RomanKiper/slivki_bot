@@ -198,3 +198,5 @@ async def orm_reduce_product_in_cart(session: AsyncSession, user_id: int, produc
         await orm_delete_from_cart(session, user_id, product_id)
         await session.commit()
         return False
+
+
