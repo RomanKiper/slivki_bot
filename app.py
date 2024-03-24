@@ -8,6 +8,7 @@ from dotenv import find_dotenv, load_dotenv
 load_dotenv(find_dotenv())
 
 from database.engine import create_db, drop_db, session_maker
+from lexicon.lexicon_for_db import categories, description_for_info_pages
 
 
 from handlers.employee import employee_router
@@ -35,7 +36,7 @@ dp.include_router(user_group_router)
 
 async def on_startup(bot):
 
-    # await drop_db()
+    await drop_db()
 
     await create_db()
 
@@ -56,6 +57,6 @@ async def main():
     await bot.send_message(config.tg_bot.id_admin, text='Бот запущен!')
     await set_main_menu(bot)
     await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
+    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types()) # передеаем все виды апдеййтов. если что-то хотим заблочить то можно передать сюда.
 
 asyncio.run(main())

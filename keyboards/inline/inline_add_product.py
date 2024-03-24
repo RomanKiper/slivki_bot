@@ -10,7 +10,7 @@ inline_product_add_dell_kb = InlineKeyboardMarkup(inline_keyboard=[
         ),
         InlineKeyboardButton(
             text="Все предложения",
-            callback_data='all_products_list'
+            callback_data='category_'
         )
     ],
     [

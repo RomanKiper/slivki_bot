@@ -6,10 +6,11 @@ from database.orm_query import orm_create_categories, orm_add_banner_description
 from lexicon.lexicon_for_db import categories, description_for_info_pages
 
 # образец подключения базы данных sqlite3
-# DB_LITE=sqlite+aiosqlite:///my_base.db
-# engine = create_async_engine(os.getenv('DB_LITE'), echo=True)
+engine = create_async_engine(os.getenv('DB_LITE'), echo=True)
 
-engine = create_async_engine(os.getenv('DB_URL'), echo=True)
+# DB_URL=postgresql+asyncpg://dev:golovchenko84@localhost:5432/bun_presentation
+# engine = create_async_engine(os.getenv('DB_URL'), echo=True) # движок для постгрес
+
 session_maker = async_sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
 
