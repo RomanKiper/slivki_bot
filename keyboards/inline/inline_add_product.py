@@ -25,7 +25,7 @@ inline_product_add_dell_kb = InlineKeyboardMarkup(inline_keyboard=[
 def get_callback_btns(
         *,                       # * означает автоматический запрет на передачу неименованных запретов
         btns: dict[str, str],
-        sizes: tuple[int] = (2,)):
+        sizes: tuple[int] = (1,2)):
 
     keyboards = InlineKeyboardBuilder()
 

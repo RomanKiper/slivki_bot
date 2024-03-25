@@ -12,6 +12,7 @@ from lexicon.lexicon_for_db import categories, description_for_info_pages
 
 
 from handlers.employee import employee_router
+from handlers.slivki_folder.slivki_menu import slivki_private_router
 from handlers.user_private import user_private_router
 from handlers.user_group import user_group_router
 from handlers.admin_add_product import admin_router
@@ -28,6 +29,7 @@ bot = Bot(token=config.tg_bot.token, parse_mode="HTML")
 dp = Dispatcher()
 
 dp.include_router(user_private_router)
+dp.include_router(slivki_private_router)
 dp.include_router(admin_router)
 dp.include_router(employee_router)
 dp.include_router(user_group_router)
@@ -36,7 +38,7 @@ dp.include_router(user_group_router)
 
 async def on_startup(bot):
 
-    # await drop_db()
+    await drop_db()
 
     await create_db()
 

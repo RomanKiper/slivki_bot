@@ -21,16 +21,16 @@ async def start_cmd(message: types.Message) -> None:
 
 
 
-@user_private_router.message(or_f(Command('main_menu'), (F.text.lower().in_({'main_menu', 'главное меню'}))))
-async def get_main_menu(message: Message):
-    keyboard = create_inline_kb_main_menu(2, 'btn_main_menu_1', 'btn_main_menu_3', 'btn_main_menu_2',
-                                          'btn_main_menu_4',
-                                          'btn_contract_links', 'download_app', 'btn_main_menu_5')
-    await message.answer(
-        text='В данном блоке ты можешь получить базовую инфрмацию о компании.',
-        reply_markup=keyboard
-    )
-    await message.delete()
+# @user_private_router.message(or_f(Command('main_menu'), (F.text.lower().in_({'main_menu', 'главное меню'}))))
+# async def get_main_menu(message: Message):
+#     keyboard = create_inline_kb_main_menu(2, 'btn_main_menu_1', 'btn_main_menu_3', 'btn_main_menu_2',
+#                                           'btn_main_menu_4',
+#                                           'btn_contract_links', 'download_app', 'btn_main_menu_5')
+#     await message.answer(
+#         text='В данном блоке ты можешь получить базовую инфрмацию о компании.',
+#         reply_markup=keyboard
+#     )
+#     await message.delete()
 
 
 @user_private_router.message(F.text.lower().in_({'о нас', 'описание', "about"}))
