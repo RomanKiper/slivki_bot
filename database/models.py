@@ -62,14 +62,3 @@ class Cart(Base):
     user: Mapped['User'] = relationship(backref='cart')
     product: Mapped['Product'] = relationship(backref='cart')
 
-
-class MainMenu(Base):
-    __tablename__ = 'main_menu'
-
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    name: Mapped[str] = mapped_column(String(150), nullable=False)
-
-
-
-
-

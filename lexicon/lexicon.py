@@ -1,5 +1,5 @@
 LEXICON_COMMANDS: dict[str, str] = {
-    '/main_menu': 'ГЛАВНОЕ МЕНЮ',
+    '/start': 'ГЛАВНОЕ МЕНЮ',
     '/admin': 'АДМИНКА',
 }
 

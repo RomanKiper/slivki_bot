@@ -1,9 +1,9 @@
 import os
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from database.models import Base
-from database.orm_query import orm_create_categories, orm_add_banner_description, orm_create_main_menu
+from database.orm_query import orm_create_categories, orm_add_banner_description
 
-from lexicon.lexicon_for_db import categories, description_for_info_pages, main_menu_btn
+from lexicon.lexicon_for_db import categories, description_for_info_pages
 
 # образец подключения базы данных sqlite3
 engine = create_async_engine(os.getenv('DB_LITE'), echo=True)
@@ -20,7 +20,6 @@ async def create_db():
 
     async with session_maker() as session:
         await orm_create_categories(session, categories)
-        await orm_create_main_menu(session, main_menu_btn)
         await orm_add_banner_description(session, description_for_info_pages)
 
 

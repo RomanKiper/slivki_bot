@@ -2,7 +2,7 @@ from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from database.models import Product, Category, Banner, Cart, User, MainMenu
+from database.models import Product, Category, Banner, Cart, User
 
 
 # Простой пагинатор
@@ -215,3 +215,4 @@ async def orm_create_main_menu(session: AsyncSession, main_menu_btn: list):
         return
     session.add_all([MainMenu(name=name) for name in main_menu_btn])
     await session.commit()
+
