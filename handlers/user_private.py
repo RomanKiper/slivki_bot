@@ -37,6 +37,10 @@ async def user_menu(callback: types.CallbackQuery, callback_data: MenuCallBack, 
     await callback.answer()
 
 
+# @user_private_router.callback_query(F.data == 'faq_main')
+# async def admin_features(callback: types.CallbackQuery):
+#
+#     await callback.message.answer("Ответы на все вопросы")
 
 
 @user_private_router.message(F.text.lower().in_({'помощь', "help"}))

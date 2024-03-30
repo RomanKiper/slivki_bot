@@ -12,13 +12,7 @@ main_advertising = ['Сайт/реклама', 'Сайт/акция', 'Instagram
 description_for_info_pages = {
     "main": "Основное меню!",
     "about": "Пиццерия Такая-то.\nРежим работы - круглосуточно.",
-    "payment": as_marked_section(
-        Bold("Варианты оплаты:"),
-        "Картой в боте",
-        "При получении карта/кеш",
-        "В заведении",
-        marker="✅ ",
-    ).as_html(),
+    "contacts_main": 'Контакты организации.',
     "shipping": as_list(
         as_marked_section(
             Bold("Варианты доставки/заказа:"),
