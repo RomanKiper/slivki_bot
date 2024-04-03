@@ -1,25 +1,7 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-# клавиатура для админки создать новый продукт, вывести все продукты.
-inline_product_add_dell_kb = InlineKeyboardMarkup(inline_keyboard=[
-    [
-        InlineKeyboardButton(
-            text="Добавить новое",
-            callback_data='add_product'
-        ),
-    ],
-    [
-        InlineKeyboardButton(
-            text="Товары",
-            callback_data='products_list'
-        ),
-        InlineKeyboardButton(
-            text="Добав/измен.баннер",
-            callback_data='add_change_banner'
-        ),
-    ],
-])
+
 
 # клавиатрура в админке для формирования инлайновых кнопок
 def get_callback_btns(

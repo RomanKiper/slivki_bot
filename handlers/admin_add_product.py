@@ -7,11 +7,11 @@ from aiogram.types import CallbackQuery
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from filters.chat_types import ChatTypeFilter
-from keyboards.inline.inline_add_product import inline_product_add_dell_kb
 from filters.is_admin import IsAdminMsg
 from database.orm_query import orm_add_product, orm_get_products, orm_delete_product, \
     orm_update_product, orm_get_product, orm_get_categories, orm_change_banner_image, orm_get_info_pages
 from keyboards.inline.inline_add_product import get_callback_btns
+from lexicon.lexicon import LEXICON_btn_main_admin_menu
 
 admin_router = Router()
 admin_router.message.filter(ChatTypeFilter(['private']), IsAdminMsg())
@@ -37,18 +37,18 @@ class AddProduct(StatesGroup):
     }
 
 
-
 @admin_router.message(Command("admin"), F.text| F.command)
 @admin_router.callback_query(lambda c: c.data.startswith("admin"))
 async def admin_handler(message_or_callback: types.Union[types.Message, CallbackQuery]):
     if isinstance(message_or_callback, types.Message):
         # Если это сообщение
         message = message_or_callback
-        await message.answer(text="Добавте товар👇", reply_markup=inline_product_add_dell_kb)
+        await message.answer(text="Административная панель. Ты можешь добавить/изменить/удалить услугу, создать/изменить/удалить КП, "
+                                  "добавить/изменить баннер.", reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
     elif isinstance(message_or_callback, CallbackQuery):
         # Если это колбэк-запрос
         callback_query = message_or_callback
-        await callback_query.message.answer(text="Добавте товар👇", reply_markup=inline_product_add_dell_kb)
+        await callback_query.message.answer(text="Добавте товар👇", reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
 
 
 @admin_router.callback_query(F.data == 'products_list')
@@ -120,7 +120,7 @@ async def cancel_handler(message: types.Message, state: FSMContext) -> None:
     if AddProduct.product_for_change:
         AddProduct.product_for_change = None
     await state.clear()
-    await message.answer("Действия отменены", reply_markup=inline_product_add_dell_kb)
+    await message.answer("Действия отменены", reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
 
 
 # Вернутся на шаг назад (на прошлое состояние)
@@ -260,13 +260,13 @@ async def add_image(message: types.Message, state: FSMContext, session: AsyncSes
             await orm_update_product(session, AddProduct.product_for_change.id, data)
         else:
             await orm_add_product(session, data)
-        await message.answer("Товар добавлен/изменен", reply_markup=inline_product_add_dell_kb)
+        await message.answer("Товар добавлен/изменен", reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
         await state.clear()
 
     except Exception as e:
         await message.answer(
             f"Ошибка: \n{str(e)}\nОбратись к программеру, он опять денег хочет",
-            reply_markup=inline_product_add_dell_kb,
+            reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)),
         )
         await state.clear()
 

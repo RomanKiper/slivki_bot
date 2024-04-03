@@ -1,13 +1,16 @@
 from aiogram import types, Router, F
 from aiogram.filters import CommandStart, Command, or_f
-from aiogram.types import Message
+from aiogram.types import Message, InputMediaPhoto, CallbackQuery
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.orm_query import orm_get_products
+from database.models import Banner
+from database.orm_query import orm_get_products, orm_get_banner
 from filters.chat_types import ChatTypeFilter
+from keyboards.inline.inline_add_product import get_callback_btns
 # from keyboards.inline.inline_first_menu import create_inline_kb_main_menu
-from handlers.menu_processing import get_menu_content
-from keyboards.inline.inline_kallback_fabr import MenuCallBack
+
+from lexicon.lexicon import LEXICON_btn_main_menu, LEXICON_btn_price_statistic
 
 from lexicon.lexicon import LEXICON_HI
 
@@ -18,29 +21,34 @@ user_private_router.message.filter(ChatTypeFilter(['private']))
 
 @user_private_router.message(F.text.lower().in_({'старт', 'начать', "start"}))
 @user_private_router.message(CommandStart())
-async def start_cmd(message: types.Message, session: AsyncSession):
-    media, reply_markup = await get_menu_content(session, level=0, menu_name="main")
+@user_private_router.callback_query(lambda c: c.data.startswith("main_menu"))
 
-    await message.answer_photo(media.media, caption=media.caption, reply_markup=reply_markup)
+async def start_cmd(message_or_callback: types.Union[types.Message, CallbackQuery], session: AsyncSession):
+    if isinstance(message_or_callback, types.Message):
+        message = message_or_callback
+        query = select(Banner).where(Banner.name == 'main')
+        result = await session.execute(query)
+        banner = result.scalar()
+        await message.answer_photo(photo=banner.image,
+                                   caption=banner.description,
+                                   reply_markup=get_callback_btns(btns=LEXICON_btn_main_menu, sizes=(1,2,)))
+        await message.delete()
+    elif isinstance(message_or_callback, CallbackQuery):
+        # Если это колбэк-запрос
+        callback = message_or_callback
+        query = select(Banner).where(Banner.name == 'main')
+        result = await session.execute(query)
+        banner = result.scalar()
+        await callback.message.answer_photo(photo=banner.image,
+                                   caption=banner.description,
+                                   reply_markup=get_callback_btns(btns=LEXICON_btn_main_menu, sizes=(1,2,)))
+        await callback.message.delete()
 
 
-@user_private_router.callback_query(MenuCallBack.filter())
-async def user_menu(callback: types.CallbackQuery, callback_data: MenuCallBack, session: AsyncSession):
+@user_private_router.callback_query(F.data == 'price_statistic')
+async def get_list_advertising_menu(callback: types.CallbackQuery):
 
-    media, reply_markup = await get_menu_content(
-        session,
-        level=callback_data.level,
-        menu_name=callback_data.menu_name,
-    )
-
-    await callback.message.edit_media(media=media, reply_markup=reply_markup)
-    await callback.answer()
-
-
-# @user_private_router.callback_query(F.data == 'faq_main')
-# async def admin_features(callback: types.CallbackQuery):
-#
-#     await callback.message.answer("Ответы на все вопросы")
+    await callback.message.answer(text="text", reply_markup=get_callback_btns(btns=LEXICON_btn_price_statistic, sizes=(2,)))
 
 
 @user_private_router.message(F.text.lower().in_({'помощь', "help"}))

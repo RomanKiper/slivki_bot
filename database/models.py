@@ -53,10 +53,13 @@ class User(Base):
 class Cart(Base):
     __tablename__ = 'cart'
 
+    name: Mapped[str] = mapped_column(String(150), nullable=False)
+    description: Mapped[str] = mapped_column(Text)
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
     product_id: Mapped[int] = mapped_column(ForeignKey('product.id', ondelete='CASCADE'), nullable=False)
     quantity: Mapped[int]
+    price: Mapped[float] = mapped_column(Numeric(5, 2), nullable=False)
     discount: Mapped[int] = mapped_column(default='0')
 
     user: Mapped['User'] = relationship(backref='cart')
