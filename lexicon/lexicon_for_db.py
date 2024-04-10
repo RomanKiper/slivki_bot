@@ -24,6 +24,7 @@ description_for_info_pages = {
         as_marked_section(Bold("Нельзя:"), "Почта", "Голуби", marker="❌ "),
         sep="\n----------------------\n",
     ).as_html(),
-    'catalog': 'Категории:',
+    'catalog': 'Категорииjhlkjhkljhlk:',
+    'offer': 'Создаем новое КП',
     'cart': 'В корзине ничего нет!'
 }

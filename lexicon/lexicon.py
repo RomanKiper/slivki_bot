@@ -103,11 +103,11 @@ LEXICON_btn_main_admin_menu: dict[str, str] = {
     }
 
 LEXICON_btn_add_offer: dict[str, str] = {
-        "Следующее": "next_offer",
-        "Предыдущее": "previos_offer",
-        "Добавить в КП": "add_to_offer",
-        "Услуги в КП": "products_in_offer",
-        "Сформировать КП": "generate_offer",
+        "Next": "next_offer",
+        "ADD": "add_to_offer",
+        "Back": "previos_offer",
+        "Смотреть КП": "products_in_offer",
+        "Сохранить КП": "generate_offer",
     }
 
 
