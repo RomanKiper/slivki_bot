@@ -61,3 +61,21 @@ class Cart(Base):
     user: Mapped['User'] = relationship(backref='cart')
     product: Mapped['Product'] = relationship(backref='cart')
 
+
+class Offer(Base):
+    __tablename__ = 'offer'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(150), nullable=False)
+    description: Mapped[str] = mapped_column(Text)
+    description2: Mapped[str] = mapped_column(Text)
+    price: Mapped[float] = mapped_column(Numeric(5,2), nullable=False)
+    price_with_discont: Mapped[float] = mapped_column(Numeric(5,2), nullable=False)
+    discont: Mapped[int]
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
+    cart_id: Mapped[int] = mapped_column(ForeignKey('cart.id', ondelete='CASCADE'), nullable=False)
+
+    cart: Mapped['Cart'] = relationship(backref='offer')
+    user: Mapped['User'] = relationship(backref='offer')
+
+

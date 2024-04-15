@@ -105,8 +105,10 @@ def get_user_cart(
         row2 = [
             InlineKeyboardButton(text='На главную 🏠',
                                  callback_data=MenuCallBack(level=0, menu_name='offer').pack()),
-            InlineKeyboardButton(text='Заказать',
-                                 callback_data=MenuCallBack(level=0, menu_name='order').pack()),
+            # InlineKeyboardButton(text='1Сохранить1 КП',
+            #                      callback_data=MenuCallBack(level=0, menu_name='save_offer').pack()),
+            InlineKeyboardButton(text='2Сохранить2 КП',
+                                 callback_data='save_offer'),
         ]
         return keyboard.row(*row2).as_markup()
     else:

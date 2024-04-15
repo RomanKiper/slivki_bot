@@ -1,9 +1,10 @@
 from aiogram.types import InputMediaPhoto
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.orm_query import orm_get_banner, orm_get_categories, orm_get_products, Paginator, orm_delete_from_cart, \
+from database.orm_query import orm_get_banner, orm_get_categories, orm_get_products, orm_delete_from_cart, \
     orm_reduce_product_in_cart, orm_add_to_cart, orm_get_user_carts
 from keyboards.inline.inline_offer import get_user_offer_btns, get_products_btns, get_user_cart
+from utils.paginator import Paginator
 
 
 async def offer_menu(session, level, menu_name):
