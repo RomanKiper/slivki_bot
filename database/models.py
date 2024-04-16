@@ -73,9 +73,10 @@ class Offer(Base):
     price_with_discont: Mapped[float] = mapped_column(Numeric(5,2), nullable=False)
     discont: Mapped[int]
     user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
-    cart_id: Mapped[int] = mapped_column(ForeignKey('cart.id', ondelete='CASCADE'), nullable=False)
 
-    cart: Mapped['Cart'] = relationship(backref='offer')
+    # cart_id: Mapped[int] = mapped_column(ForeignKey('cart.id', ondelete='CASCADE'), nullable=False)
+
+    # cart: Mapped['Cart'] = relationship(backref='offer')
     user: Mapped['User'] = relationship(backref='offer')
 
 
