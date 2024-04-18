@@ -139,6 +139,11 @@ async def orm_delete_from_cart(session: AsyncSession, user_id: int, product_id: 
     await session.execute(query)
     await session.commit()
 
+async def orm_delete_all_carts(session: AsyncSession, user_id: int):
+    query = delete(Cart).filter(Cart.user_id == user_id).options(joinedload(Cart.product))
+    await session.execute(query)
+    await session.commit()
+
 
 async def orm_reduce_product_in_cart(session: AsyncSession, user_id: int, product_id: int):
     query = select(Cart).where(Cart.user_id == user_id, Cart.product_id == product_id).options(joinedload(Cart.product))

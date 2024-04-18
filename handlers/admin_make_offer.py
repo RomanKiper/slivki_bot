@@ -3,15 +3,17 @@ from aiogram.filters import Command, StateFilter, or_f
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
+from sqlalchemy import select
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
-from database.models import Offer
+from database.models import Offer, Cart
 from filters.chat_types import ChatTypeFilter
 from filters.is_admin import IsAdminMsg
 from database.orm_query import orm_add_product, orm_get_products, orm_delete_product, \
     orm_update_product, orm_get_product, orm_get_categories, orm_change_banner_image, orm_get_info_pages, orm_add_user, \
-    orm_add_to_cart, orm_get_user_carts, orm_add_offer
+    orm_add_to_cart, orm_get_user_carts, orm_add_offer, orm_delete_all_carts
 from handlers.menu_processing import get_menu_content
 from keyboards.inline.inline_add_product import get_callback_btns
 from keyboards.inline.inline_offer import MenuCallBack
@@ -180,6 +182,8 @@ async def add_description(message: types.Message, state: FSMContext, session: As
     media, reply_markup = await get_menu_content(session, level=0, menu_name="offer")
     await message.answer_photo(media.media, caption=media.caption, reply_markup=reply_markup)
     await state.set_state(AddOffer.making_offer)
+    user = message.from_user
+    await orm_delete_all_carts(session, user_id=user.id)
 
 
 async def add_to_cart(callback: types.CallbackQuery, callback_data: MenuCallBack, session: AsyncSession):
@@ -222,12 +226,26 @@ async def add_description2(message: types.Message, state: FSMContext):
     await message.answer("Вы ввели не допустимые данные, введите текст описания КП")
 
 
+async def orm_get_product_id_in_carts(session: AsyncSession, user_id):
+    query = select(Cart).filter(Cart.user_id == user_id).options(joinedload(Cart.product))
+    result = await session.execute(query)
+    return result.scalars().all()
+
+
 # Ловим callback выбора
 @admin_offer_router.callback_query(AddOffer.making_offer, F.data == 'save_offer')
 async def making_new_offer(callback: types.CallbackQuery, state: FSMContext, session: AsyncSession):
     user_id = callback.from_user.id
     carts = await orm_get_user_carts(session, user_id)
 
+    product_id_quantity_list = []
+
+    for a in carts:
+        pr_qt = {a.product.id: a.quantity}
+        product_id_quantity_list.append(pr_qt)
+        print(f" айди продукта {a.product.id}, колиичество в пакете{a.quantity}")
+
+    print(product_id_quantity_list)
     await state.update_data(making_offer=carts)
 
     await state.set_state(AddOffer.discount)
@@ -265,7 +283,7 @@ async def add_discount(message: types.Message, state: FSMContext, session: Async
         name=data['name'],
         description=data['description'],
         discont=data['discount'],
-        description2=data['making_offer'],
+        description2='making_offer',
         price=99999,
         price_with_discont=88888,
         user_id=message.from_user.id
