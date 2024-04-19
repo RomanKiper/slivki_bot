@@ -235,23 +235,22 @@ async def orm_get_product_id_in_carts(session: AsyncSession, user_id):
 # Ловим callback выбора
 @admin_offer_router.callback_query(AddOffer.making_offer, F.data == 'save_offer')
 async def making_new_offer(callback: types.CallbackQuery, state: FSMContext, session: AsyncSession):
-    user_id = callback.from_user.id
-    carts = await orm_get_user_carts(session, user_id)
-
-    product_id_quantity_list = []
-
-    for a in carts:
-        pr_qt = {a.product.id: a.quantity}
-        product_id_quantity_list.append(pr_qt)
-        print(f" айди продукта {a.product.id}, колиичество в пакете{a.quantity}")
-
-    print(product_id_quantity_list)
-    await state.update_data(making_offer=carts)
+    # user_id = callback.from_user.id
+    # carts = await orm_get_user_carts(session, user_id)
+    #
+    # product_id_quantity_list = []
+    #
+    # for a in carts:
+    #     pr_qt = {a.product.id: a.quantity}
+    #     product_id_quantity_list.append(pr_qt)
+    #     print(f" айди продукта {a.product.id}, колиичество в пакете{a.quantity}")
+    #
+    # print(product_id_quantity_list)
+    # await state.update_data(making_offer=carts)
 
     await state.set_state(AddOffer.discount)
     await callback.message.answer('Введите % скилки от 0 до 99!')
     await callback.answer()
-
 
 
 #
@@ -263,7 +262,6 @@ async def making_new_offer(callback: types.CallbackQuery, state: FSMContext, ses
 #
 # # Ловим данные для состояние discount
 @admin_offer_router.message(AddOffer.discount, F.text)
-
 async def add_discount(message: types.Message, state: FSMContext, session: AsyncSession):
     if message.text == "." and AddOffer.offer_for_change:
         await state.update_data(discount=AddOffer.offer_for_change.discount)
@@ -278,6 +276,20 @@ async def add_discount(message: types.Message, state: FSMContext, session: Async
     data = await state.get_data()
     print(f"тесттесттесттест{data}")
 
+    user_id = message.from_user.id
+    carts = await orm_get_user_carts(session, user_id)
+
+    product_id_quantity_list = []
+
+    for a in carts:
+        pr_qt = {a.product.id: a.quantity}
+        product_id_quantity_list.append(pr_qt)
+        print(f" айди продукта {a.product.id}, колиичество в пакете{a.quantity}")
+
+    print(product_id_quantity_list)
+    cart_product_list_ids = product_id_quantity_list
+    await state.update_data(making_offer=carts)
+
 
     obj = Offer(
         name=data['name'],
@@ -286,25 +298,16 @@ async def add_discount(message: types.Message, state: FSMContext, session: Async
         description2='making_offer',
         price=99999,
         price_with_discont=88888,
-        user_id=message.from_user.id
-
-
-        # category_id=int(data["category"]),
+        user_id=message.from_user.id,
+        # cart_product_list_ids=Offer.save_cart_product_list_ids(cart_product_list_ids)
     )
+    obj.save_cart_product_list_ids(cart_product_list_ids)
     session.add(obj)
     await session.commit()
     await message.answer("КП добавлен/изменен", )
     await state.clear()
 
-    # id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    # name: Mapped[str] = mapped_column(String(150), nullable=False)
-    # description: Mapped[str] = mapped_column(Text)
-    # description2: Mapped[str] = mapped_column(Text)
-    # price: Mapped[float] = mapped_column(Numeric(5,2), nullable=False)
-    # price_with_discont: Mapped[float] = mapped_column(Numeric(5,2), nullable=False)
-    # discont: Mapped[int]
-    # user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
-    # cart_id: Mapped[int] = mapped_column(ForeignKey('cart.id', ondelete='CASCADE'), nullable=False)
+
 
     # try:
     #     if AddOffer.offer_for_change:

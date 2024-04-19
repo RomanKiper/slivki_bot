@@ -1,3 +1,5 @@
+import json
+
 from sqlalchemy import String, Float, Text, DateTime, func, ForeignKey, Numeric, BigInteger
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
@@ -74,9 +76,20 @@ class Offer(Base):
     discont: Mapped[int]
     user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
 
-    # cart_id: Mapped[int] = mapped_column(ForeignKey('cart.id', ondelete='CASCADE'), nullable=False)
+    cart_product_list_ids: Mapped[str] = mapped_column(Text)   # список id и колич-ва каждого товара. Список словарей.
 
-    # cart: Mapped['Cart'] = relationship(backref='offer')
     user: Mapped['User'] = relationship(backref='offer')
+
+    def serialize_cart_product_list_ids(self, cart_product_list_ids):
+        return json.dumps(cart_product_list_ids)
+
+    def deserialize_cart_product_list_ids(self, serialized_cart_product_list_ids):
+        return json.dumps(serialized_cart_product_list_ids)
+
+    def save_cart_product_list_ids(self, cart_product_list_ids):
+        self.cart_product_list_ids = self.serialize_cart_product_list_ids(cart_product_list_ids)
+
+    def load_cart_product_list_ids(self):
+        return self.deserialize_cart_product_list_ids(self.cart_product_list_ids)
 
 
