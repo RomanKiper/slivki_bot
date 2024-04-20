@@ -274,17 +274,24 @@ async def add_discount(message: types.Message, state: FSMContext, session: Async
 
     await state.update_data(discount=int(message.text))
     data = await state.get_data()
-    print(f"тесттесттесттест{data}")
+    print(f"Сохраненные данные data: {data}")
 
     user_id = message.from_user.id
     carts = await orm_get_user_carts(session, user_id)
 
     product_id_quantity_list = []
-
+    product_in_cart_price = 0
     for a in carts:
         pr_qt = {a.product.id: a.quantity}
         product_id_quantity_list.append(pr_qt)
+
+        product_in_cart_price = round(product_in_cart_price + (a.product.price * a.quantity), 2)
+
+        product_in_cart_price_with_discont = round(product_in_cart_price * (100 - int(message.text)) /100, 2)
+
         print(f" айди продукта {a.product.id}, колиичество в пакете{a.quantity}")
+
+    print(f" Общая стоимость корзины {product_in_cart_price}")
 
     print(product_id_quantity_list)
     cart_product_list_ids = product_id_quantity_list
@@ -296,15 +303,14 @@ async def add_discount(message: types.Message, state: FSMContext, session: Async
         description=data['description'],
         discont=data['discount'],
         description2='making_offer',
-        price=99999,
-        price_with_discont=88888,
+        price=product_in_cart_price,
+        price_with_discont=product_in_cart_price_with_discont,
         user_id=message.from_user.id,
-        # cart_product_list_ids=Offer.save_cart_product_list_ids(cart_product_list_ids)
     )
     obj.save_cart_product_list_ids(cart_product_list_ids)
     session.add(obj)
     await session.commit()
-    await message.answer("КП добавлен/изменен", )
+    await message.answer("КП добавлено/изменено", )
     await state.clear()
 
 
