@@ -28,12 +28,30 @@ class AddProduct(StatesGroup):
 
     product_for_change = None
 
-
     texts = {
         'AddProduct:name': 'Введите название заново:',
         'AddProduct:description': 'Введите описание заново:',
         'AddProduct:price': 'Введите стоимость заново:',
         'AddProduct:image': 'Этот стейт последний, поэтому...',
+    }
+
+
+class AddOffer(StatesGroup):
+    # Шаги состояний
+    name = State()
+    description = State()
+    making_offer = State()
+    discount = State()
+
+
+    offer_for_change = None
+
+
+    texts = {
+        'AddOffer:name': 'Введите название заново:',
+        'AddOffer:description': 'Введите описание заново:',
+        'AddOffer:making_offer': 'Выберите услугу заново:',
+        'AddOffer:discount': 'Этот стейт последний, поэтому...',
     }
 
 
@@ -124,14 +142,36 @@ async def cancel_handler(message: types.Message, state: FSMContext) -> None:
 
 
 # Вернутся на шаг назад (на прошлое состояние)
+# Прописано для двух машин состояний: из make_offer и add_product
 @admin_router.message(StateFilter("*"), Command("назад"))
 @admin_router.message(StateFilter("*"), F.text.casefold() == "назад")
 async def back_step_handler(message: types.Message, state: FSMContext) -> None:
     current_state = await state.get_state()
 
-    if current_state == AddProduct.name:
+    if current_state == AddProduct.name or current_state == AddOffer.name:
         await message.answer(
-            'Предидущего шага нет, или введите название товара или напишите "отмена"'
+            'Предидущего шага нет, или введите название или напишите "отмена"'
+        )
+        return
+
+    elif current_state == AddOffer.description:
+        await state.set_state(AddOffer.name)
+        await message.answer(
+            f"Ок, вы вернулись к прошлому шагу \n {AddOffer.texts[AddOffer.name]}"
+        )
+        return
+
+    elif current_state == AddOffer.making_offer:
+        await state.set_state(AddOffer.description)
+        await message.answer(
+            f"Ок, вы вернулись к прошлому шагу \n {AddOffer.texts[AddOffer.description]}"
+        )
+        return
+
+    elif current_state == AddOffer.discount:
+        await state.set_state(AddOffer.making_offer)
+        await message.answer(
+            f"Ок, вы вернулись к прошлому шагу \n {AddOffer.texts[AddOffer.making_offer]}"
         )
         return
 

@@ -89,6 +89,7 @@ class Offer(Base):
     def save_cart_product_list_ids(self, cart_product_list_ids):
         self.cart_product_list_ids = self.serialize_cart_product_list_ids(cart_product_list_ids)
 
+
     def load_cart_product_list_ids(self):
         return self.deserialize_cart_product_list_ids(self.cart_product_list_ids)
 

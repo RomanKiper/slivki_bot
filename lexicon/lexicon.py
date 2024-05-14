@@ -97,9 +97,11 @@ LEXICON_btn_main_menu: dict[str, str] = {
 
 LEXICON_btn_main_admin_menu: dict[str, str] = {
         "Создать услугу": "add_product",
-        "Предложения": "products_list",
+        "Услуги": "products_list",
         "Создать КП": "add_offer",
+        "Готовые КП": "offers_list",
         "Баннер.Добав/измен.": "add_change_banner",
+
     }
 
 LEXICON_btn_add_offer: dict[str, str] = {

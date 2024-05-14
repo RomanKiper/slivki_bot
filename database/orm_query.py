@@ -23,6 +23,12 @@ async def orm_get_products(session: AsyncSession, category_id):
     return result.scalars().all()
 
 
+async def orm_get_products_in_offer(session: AsyncSession, pr_id):
+    query = select(Product).where(Product.id == int(pr_id))
+    result = await session.execute(query)
+    return result.scalar()
+
+
 async def orm_get_product(session: AsyncSession, product_id: int):
     query = select(Product).where(Product.id == product_id)
     result = await session.execute(query)
@@ -174,6 +180,32 @@ async def orm_add_offer(session: AsyncSession(), data: dict):
     )
     session.add(obj)
     await session.commit()
+
+
+async def orm_get_offers(session: AsyncSession):
+    query = select(Offer)
+    result = await session.execute(query)
+    return result.scalars().all()
+
+
+async def orm_get_offers_id(session: AsyncSession, offer_id: int):
+    query = select(Offer).where(Offer.id == int(offer_id))
+    result = await session.execute(query)
+    return result.scalar()
+
+
+async def orm_delete_offer(session: AsyncSession, offer_id: int, user_id: int):
+    query = delete(Offer).where(Offer.user_id == user_id, Offer.id == int(offer_id))
+    await session.execute(query)
+    await session.commit()
+
+
+# async def orm_delete_product(session: AsyncSession, product_id: int):
+#     query = delete(Product).where(Product.id == product_id)
+#     await session.execute(query)
+#     await session.commit()
+
+
 
 #
 #
