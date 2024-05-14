@@ -161,19 +161,13 @@ async def back_step_handler(message: types.Message, state: FSMContext) -> None:
         )
         return
 
-    elif current_state == AddOffer.making_offer:
+    elif current_state == AddOffer.making_offer or current_state == AddOffer.discount:
         await state.set_state(AddOffer.description)
         await message.answer(
             f"Ок, вы вернулись к прошлому шагу \n {AddOffer.texts[AddOffer.description]}"
         )
         return
 
-    elif current_state == AddOffer.discount:
-        await state.set_state(AddOffer.making_offer)
-        await message.answer(
-            f"Ок, вы вернулись к прошлому шагу \n {AddOffer.texts[AddOffer.making_offer]}"
-        )
-        return
 
     elif current_state == AddProduct.price:
         await state.set_state(AddProduct.description)

@@ -98,7 +98,6 @@ async def starring_at_offer(callback: types.CallbackQuery, session: AsyncSession
         reply_markup=get_callback_btns(
             btns={
                 "Удалить": f"remove_offer_{offer.id}",
-                "Изменить": f"change_{offer.id}",
                 "Назад в список КП": "offers_list",
             },
             sizes=(2,)
@@ -120,7 +119,6 @@ async def delete_offer_callback(callback: types.CallbackQuery, session: AsyncSes
 
     await callback.answer("КП удалено")
     await callback.message.answer("КП удалено!")
-    await callback.message.answer(f"{offer_id}")
 
 
 # Становимся в состояние ожидания ввода name
@@ -136,28 +134,7 @@ async def add_product(callback: types.CallbackQuery, state: FSMContext):
 #В нашем случае срабатывет хэндлер сброса сосояния, который находится в папке admin_add_product
 
 
-# Вернутся на шаг назад (на прошлое состояние)
-# @admin_offer_router.message(StateFilter("*"), Command("назадд"))
-# @admin_offer_router.message(StateFilter("*"), F.text.casefold() == "назадд")
-# async def back_step_handler(message: types.Message, state: FSMContext) -> None:
-#     current_offer_state = await state.get_state()
-#
-#     if current_offer_state == AddOffer.name:
-#         await message.answer(
-#             'Предидущего шага нет, или введите название товара или напишите "отмена"'
-#         )
-#         return
-#     previous = None
-#     for step in AddOffer.__all_states__:
-#         if step.state == current_offer_state:
-#             await state.set_state(previous)
-#             await message.answer(
-#                 f"Ок, вы вернулись к прошлому шагу \n {AddOffer.texts[previous.state]}"
-#             )
-#             return
-#         previous = step
-#
-#
+
 # Ловим данные для состояние name и потом меняем состояние на description
 @admin_offer_router.message(AddOffer.name, F.text)
 async def add_name(message: types.Message, state: FSMContext):
