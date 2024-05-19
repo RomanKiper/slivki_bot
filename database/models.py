@@ -39,6 +39,47 @@ class Product(Base):
     category: Mapped['Category'] = relationship(backref='product')
 
 
+class Faq(Base):
+    __tablename__ = 'faq'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(150), nullable=False)
+    description: Mapped[str] = mapped_column(Text)
+
+
+class Notes(Base):
+    __tablename__ = 'notes'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(150), nullable=False)
+    description: Mapped[str] = mapped_column(Text)
+
+
+class Bloger(Base):
+    __tablename__ = 'bloger'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(150), nullable=False)
+    description: Mapped[str] = mapped_column(Text)
+    image: Mapped[str] = mapped_column(String(150))
+
+
+class Video_review(Base):
+    __tablename__ = 'video_review'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(Text)
+    video: Mapped[str] = mapped_column(String(150))
+
+
+class Document(Base):
+    __tablename__ = 'documents'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(150), nullable=False)
+    document: Mapped[str] = mapped_column(String(150))
+
+
 
 class User(Base):
     __tablename__ = "user"

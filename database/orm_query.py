@@ -2,7 +2,7 @@ from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from database.models import Product, Category, Banner, Cart, User, Offer
+from database.models import Product, Category, Banner, Cart, User, Offer, Faq
 
 
 async def orm_add_product(session: AsyncSession(), data: dict):
@@ -200,39 +200,40 @@ async def orm_delete_offer(session: AsyncSession, offer_id: int, user_id: int):
     await session.commit()
 
 
-# async def orm_delete_product(session: AsyncSession, product_id: int):
-#     query = delete(Product).where(Product.id == product_id)
-#     await session.execute(query)
-#     await session.commit()
+######################## Работа с  FAQ #######################################
 
 
 
-#
-#
-# async def orm_get_user_carts(session: AsyncSession, user_id):
-#     query = select(Cart).filter(Cart.user_id == user_id).options(joinedload(Cart.product))
-#     result = await session.execute(query)
-#     return result.scalars().all()
-#
-#
-# async def orm_delete_from_cart(session: AsyncSession, user_id: int, product_id: int):
-#     query = delete(Cart).where(Cart.user_id == user_id, Cart.product_id == product_id)
-#     await session.execute(query)
-#     await session.commit()
-#
-#
-# async def orm_reduce_product_in_cart(session: AsyncSession, user_id: int, product_id: int):
-#     query = select(Cart).where(Cart.user_id == user_id, Cart.product_id == product_id).options(joinedload(Cart.product))
-#     cart = await session.execute(query)
-#     cart = cart.scalar()
-#
-#     if not cart:
-#         return
-#     if cart.quantity > 1:
-#         cart.quantity -= 1
-#         await session.commit()
-#         return True
-#     else:
-#         await orm_delete_from_cart(session, user_id, product_id)
-#         await session.commit()
-#         return False
+async def orm_add_faq(session: AsyncSession(), data: dict):
+    obj = Faq(
+        name=data['name'],
+        description=data['description'],
+    )
+    session.add(obj)
+    await session.commit()
+
+
+async def orm_get_faqs(session: AsyncSession):
+    query = select(Faq)
+    result = await session.execute(query)
+    return result.scalars().all()
+
+
+async def orm_get_faq(session: AsyncSession, faq_id: int):
+    query = select(Faq).where(Faq.id == faq_id)
+    result = await session.execute(query)
+    return result.scalar()
+
+
+
+async def orm_delete_faq(session: AsyncSession, faq_id: int):
+    query = delete(Faq).where(Faq.id == faq_id)
+    await session.execute(query)
+    await session.commit()
+
+
+
+
+
+
+

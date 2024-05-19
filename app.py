@@ -15,6 +15,7 @@ from handlers.user_private import user_private_router
 from handlers.user_group import user_group_router
 from handlers.admin_add_product import admin_router
 from handlers.admin_make_offer import admin_offer_router
+from handlers.admin_add_faq import admin_faq_router
 from keyboards.main_menu import set_main_menu
 from middlewares.db import DataBaseSession
 
@@ -30,6 +31,7 @@ dp = Dispatcher()
 dp.include_router(user_private_router)
 dp.include_router(admin_router)
 dp.include_router(admin_offer_router)
+dp.include_router(admin_faq_router)
 dp.include_router(user_group_router)
 
 

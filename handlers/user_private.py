@@ -10,9 +10,9 @@ from filters.chat_types import ChatTypeFilter
 from keyboards.inline.inline_add_product import get_callback_btns
 # from keyboards.inline.inline_first_menu import create_inline_kb_main_menu
 
-from lexicon.lexicon import LEXICON_btn_main_menu, LEXICON_btn_price_statistic
+from lexicon.lexicon import LEXICON_btn_main_menu, LEXICON_btn_price_statistic, LEXICON_btn_description
 
-from lexicon.lexicon import LEXICON_HI
+from lexicon.lexicon import LEXICON_HI, LEXICON_RU
 
 
 user_private_router = Router()
@@ -49,6 +49,13 @@ async def start_cmd(message_or_callback: types.Union[types.Message, CallbackQuer
 async def get_list_advertising_menu(callback: types.CallbackQuery):
 
     await callback.message.answer(text="text", reply_markup=get_callback_btns(btns=LEXICON_btn_price_statistic, sizes=(2,)))
+    await callback.message.delete()
+
+
+@user_private_router.callback_query(F.data == 'about')
+async def get_info_about(callback: types.CallbackQuery):
+    await callback.message.answer(text=LEXICON_RU['/description_slivki'], reply_markup=get_callback_btns(btns=LEXICON_btn_description, sizes=(2,)))
+    await callback.message.delete()
 
 
 @user_private_router.message(F.text.lower().in_({'помощь', "help"}))
