@@ -1,11 +1,8 @@
 from aiogram import Router, F, types
-from aiogram.filters import Command, StateFilter, or_f
+from aiogram.filters import StateFilter
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
-from aiogram.types import CallbackQuery
-
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from filters.chat_types import ChatTypeFilter
 from filters.is_admin import IsAdminMsg
 from database.orm_query import orm_delete_faq, orm_get_faq,  orm_add_faq, orm_get_faqs
@@ -26,7 +23,6 @@ class Add_FAQ(StatesGroup):
         'AddProduct:name': 'Введите название заново:',
         'AddProduct:description': 'Введите описание заново:',
     }
-
 
 
 @admin_faq_router.callback_query(F.data == 'faq_list')
@@ -158,7 +154,7 @@ async def add_description(message: types.Message, state: FSMContext, session: As
 
     try:
         await orm_add_faq(session, data)
-        await message.answer("Вопрос добавлен", reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
+        await message.answer("Часто задаваемый вопрос добавлен 👍", reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
         await state.clear()
 
     except Exception as e:

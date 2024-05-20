@@ -95,6 +95,20 @@ LEXICON_btn_main_menu: dict[str, str] = {
         "ГОТОВЫЕ КП": "offers_main",
     }
 
+
+LEXICON_btn_main_links: dict[str, str] = {
+        "САЙТ SLIVKI.BY": "links_main",
+        "ИНСТАГРАМ ВСЕ": "price_statistic",
+        "ТИКТОК ВСЕ": "about",
+        "ТЕЛЕГРАМ ВСЕ": "about",
+        "ПРАЙСЫ": "contacts_main",
+        "ДОГ-Р ОФЕРТЫ": "faq_main",
+        "ПРИЛОЖЕНИЕ": "blogers-main",
+        "ТАБЛИЦЫ": "offers_main",
+        "НАЗАД В МЕНЮ": "main_menu",
+    }
+
+
 LEXICON_btn_main_admin_menu: dict[str, str] = {
         "Создать услугу": "add_product",
         "Услуги": "products_list",

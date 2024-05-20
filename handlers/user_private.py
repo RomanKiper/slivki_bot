@@ -5,12 +5,13 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.models import Banner
-from database.orm_query import orm_get_products, orm_get_banner
+from database.orm_query import orm_get_products, orm_get_banner, orm_get_faqs, orm_get_faq
 from filters.chat_types import ChatTypeFilter
 from keyboards.inline.inline_add_product import get_callback_btns
 # from keyboards.inline.inline_first_menu import create_inline_kb_main_menu
 
-from lexicon.lexicon import LEXICON_btn_main_menu, LEXICON_btn_price_statistic, LEXICON_btn_description
+from lexicon.lexicon import LEXICON_btn_main_menu, LEXICON_btn_price_statistic, LEXICON_btn_description, \
+    LEXICON_btn_main_links
 
 from lexicon.lexicon import LEXICON_HI, LEXICON_RU
 
@@ -69,7 +70,35 @@ async def hi_cmd(message: types.Message):
     await message.answer("И тебя приветствую!")
 
 
+############################################## часто задаваемые вопросы в общем доступе ###################
+@user_private_router.callback_query(F.data == 'faq_main')
+async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
+    faqs = await orm_get_faqs(session)
+    btns = {faq.name: f'faq2_{faq.id}' for faq in faqs}
+    await callback.message.answer("Часто задаваемые вопросы:", reply_markup=get_callback_btns(btns=btns))
 
 
+@user_private_router.callback_query(F.data.startswith('faq2_'))
+async def starring_at_product(callback: types.CallbackQuery, session: AsyncSession):
+    faq_id = callback.data.split('_')[-1]
+    faq_item = await orm_get_faq(session, int(faq_id))
+    await callback.message.answer(
+        f"<strong>{faq_item.name}</strong>\n\n"
+        f"{faq_item.description}\n\n",
+        reply_markup=get_callback_btns(
+            btns={
+                "Назад": f"faq_main",
+            },
+            sizes=(2,)
+        ),
+    )
+    await callback.answer()
 
+######################################ссылки ######################################
+
+@user_private_router.callback_query(F.data == 'links_main')
+async def get_list_advertising_menu(callback: types.CallbackQuery):
+
+    await callback.message.answer(text="Рабочие ссылки компании.", reply_markup=get_callback_btns(btns=LEXICON_btn_main_links, sizes=(1,2,2,2)))
+    await callback.message.delete()
 
