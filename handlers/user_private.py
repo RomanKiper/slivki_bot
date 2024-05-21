@@ -7,11 +7,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from database.models import Banner
 from database.orm_query import orm_get_products, orm_get_banner, orm_get_faqs, orm_get_faq
 from filters.chat_types import ChatTypeFilter
-from keyboards.inline.inline_add_product import get_callback_btns
+from keyboards.inline.inline_add_product import get_callback_btns, get_url_btns, get_inlineMix_btns
 # from keyboards.inline.inline_first_menu import create_inline_kb_main_menu
 
 from lexicon.lexicon import LEXICON_btn_main_menu, LEXICON_btn_price_statistic, LEXICON_btn_description, \
-    LEXICON_btn_main_links
+    LEXICON_btn_main_links, LEXICON_btn_slivki_site_link, LEXICON_btn_back_menu_links, LEXICON_btn_app_link
 
 from lexicon.lexicon import LEXICON_HI, LEXICON_RU
 
@@ -97,8 +97,56 @@ async def starring_at_product(callback: types.CallbackQuery, session: AsyncSessi
 ######################################ссылки ######################################
 
 @user_private_router.callback_query(F.data == 'links_main')
-async def get_list_advertising_menu(callback: types.CallbackQuery):
-
+async def get_main_menu_links(callback: types.CallbackQuery):
     await callback.message.answer(text="Рабочие ссылки компании.", reply_markup=get_callback_btns(btns=LEXICON_btn_main_links, sizes=(1,2,2,2)))
     await callback.message.delete()
 
+
+@user_private_router.callback_query(F.data == 'site_slivki_link')
+async def get_site_slivki_link(callback: types.CallbackQuery):
+    await callback.message.answer(text="Ссылка на сайт Сливки Бай", reply_markup=get_inlineMix_btns(btns=LEXICON_btn_slivki_site_link, sizes=(1,)) )
+    disable_web_page_preview = True
+    await callback.message.delete()
+
+
+@user_private_router.callback_query(F.data == 'app-link')
+async def get_app_link(callback: types.CallbackQuery):
+    await callback.message.answer(text="Ссылка на скачивание мобильного приложения slivkiby", reply_markup=get_inlineMix_btns(btns=LEXICON_btn_app_link, sizes=(1,)) )
+    disable_web_page_preview = True
+    await callback.message.delete()
+
+
+@user_private_router.callback_query(F.data == 'insta_all_links')
+async def get_all_insta_links(callback: types.CallbackQuery):
+    await callback.message.answer(text=LEXICON_RU['/insta_links'], disable_web_page_preview=True,
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
+    await callback.message.delete()
+
+
+@user_private_router.callback_query(F.data == 'tiktok_all_links')
+async def get_all_tiktok_links(callback: types.CallbackQuery):
+    await callback.message.answer(text=LEXICON_RU['/tiktok_links'], disable_web_page_preview=True,
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
+    await callback.message.delete()
+
+
+@user_private_router.callback_query(F.data == 'telegram_all_links')
+async def get_all_telegram_links(callback: types.CallbackQuery):
+    await callback.message.answer(text=LEXICON_RU['/telega_links'], disable_web_page_preview=True,
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
+    await callback.message.delete()
+
+
+@user_private_router.callback_query(F.data == 'agreement_links')
+async def get_agreement_links(callback: types.CallbackQuery):
+    await callback.message.answer(text=LEXICON_RU['/agreement_links'], disable_web_page_preview=True,
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
+    await callback.message.delete()
+
+
+# перенес в admin_add_product  для того чтобы досту был только у админов
+# @user_private_router.callback_query(F.data == 'tables_links')
+# async def get_tables_links(callback: types.CallbackQuery):
+#     await callback.message.answer(text=LEXICON_RU['/list_links_work_tables'], disable_web_page_preview=True,
+#                                   reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
+#     await callback.message.delete()

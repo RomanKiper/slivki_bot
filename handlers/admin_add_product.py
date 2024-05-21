@@ -10,8 +10,8 @@ from filters.chat_types import ChatTypeFilter
 from filters.is_admin import IsAdminMsg
 from database.orm_query import orm_add_product, orm_get_products, orm_delete_product, \
     orm_update_product, orm_get_product, orm_get_categories, orm_change_banner_image, orm_get_info_pages
-from keyboards.inline.inline_add_product import get_callback_btns
-from lexicon.lexicon import LEXICON_btn_main_admin_menu
+from keyboards.inline.inline_add_product import get_callback_btns, get_inlineMix_btns
+from lexicon.lexicon import LEXICON_btn_main_admin_menu, LEXICON_RU, LEXICON_btn_back_menu_links
 
 admin_router = Router()
 admin_router.message.filter(ChatTypeFilter(['private']), IsAdminMsg())
@@ -367,3 +367,10 @@ async def back_step_handler(message: types.Message, state: FSMContext) -> None:
             )
             return
         previous = step
+
+
+@admin_router.callback_query(F.data == 'tables_links')
+async def get_tables_links(callback: types.CallbackQuery):
+    await callback.message.answer(text=LEXICON_RU['/list_links_work_tables'], disable_web_page_preview=True,
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
+    await callback.message.delete()

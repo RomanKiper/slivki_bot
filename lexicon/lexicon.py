@@ -50,6 +50,7 @@ LEXICON_RU: dict[str, str] = {
     '/insta_links': '<b>Ссылки на каналы Instagram:</b>\n'
                     '<a href="https://www.instagram.com/slivkiby">www.instagram.com/slivkiby</a>\n'
                     '<a href="https://www.instagram.com/giperspros">www.instagram.com/giperspros</a>\n'
+                    '<a href="https://www.instagram.com/slivkiby_beauty/">www.instagram.com/slivkiby_beauty</a>\n'
                     '<a href="https://www.instagram.com/slivkiby_brest">www.instagram.com/slivkiby_brest</a>\n'
                     '<a href="https://www.instagram.com/slivkiby_gomel">www.instagram.com/slivkiby_gomel</a>\n'
                     '<a href="https://www.instagram.com/slivkiby_mogilev">www.instagram.com/slivkiby_mogilev</a>\n'
@@ -61,6 +62,24 @@ LEXICON_RU: dict[str, str] = {
                     '<a href="https://www.instagram.com/slivki_baranovichi">www.instagram.com/slivki_baranovichi</a>\n'
                     '<a href="https://www.instagram.com/slivki_borisov">www.instagram.com/slivki_borisov</a>\n'
                     '<a href="https://www.instagram.com/slivkiby_orsha">www.instagram.com/slivkiby_orsha</a>\n'
+                    '<a href="https://www.instagram.com/akcii_skidki_belarus/">www.instagram.com/akcii_skidki_belarus</a>\n'
+    ,
+
+    '/telega_links': '<b>Ссылки на каналы Telegram:</b>\n'
+                    '<a href="https://t.me/slivki_by">https://t.me/slivki_by</a>\n'
+                    '<a href="https://t.me/slivkiby_mogilev">https://t.me/slivkiby_mogilev</a>\n'
+                    '<a href="https://t.me/slivkiby_gomel">https://t.me/slivkiby_gomel</a>\n'
+                    '<a href="https://t.me/slivkiby_vitebsk">https://t.me/slivkiby_vitebsk</a>\n'
+                    '<a href="https://t.me/slivkiby_bobruysk">https://t.me/slivkiby_bobruysk</a>\n'
+                    '<a href="https://t.me/slivki_brest">https://t.me/slivki_brest</a>\n'
+                    '<a href="https://t.me/slivki_baranovichi">https://t.me/slivki_baranovichi</a>\n'
+                    '<a href="https://t.me/slivkiby_grodno">https://t.me/slivkiby_grodno</a>\n'
+    ,
+
+    '/agreement_links': '<b>Ссылки на договоры оферты:</b>\n'
+                     '<a href="https://www.slivki.by/publichnyj-dogovor-okazaniya-reklamnyh-uslug-i-razmesheniya-akcij">Публичный договор возмездного оказания рекламных услуг</a>\n\n'
+                     '<a href="https://www.slivki.by/dogovor-oferta-instagram">Договор оферта инстаграм</a>\n'
+
     ,
 
     '/tiktok_links': '<b>Ссылки на каналы TikTok:</b>\n'
@@ -97,14 +116,14 @@ LEXICON_btn_main_menu: dict[str, str] = {
 
 
 LEXICON_btn_main_links: dict[str, str] = {
-        "САЙТ SLIVKI.BY": "links_main",
-        "ИНСТАГРАМ ВСЕ": "price_statistic",
-        "ТИКТОК ВСЕ": "about",
-        "ТЕЛЕГРАМ ВСЕ": "about",
-        "ПРАЙСЫ": "contacts_main",
-        "ДОГ-Р ОФЕРТЫ": "faq_main",
-        "ПРИЛОЖЕНИЕ": "blogers-main",
-        "ТАБЛИЦЫ": "offers_main",
+        "САЙТ SLIVKI.BY": "site_slivki_link",
+        "ИНСТАГРАМ ВСЕ": "insta_all_links",
+        "ТИКТОК ВСЕ": "tiktok_all_links",
+        "ТЕЛЕГРАМ ВСЕ": "telegram_all_links",
+        "ПРАЙСЫ": "prices_list",
+        "ДОГ-Р ОФЕРТЫ": "agreement_links",
+        "ПРИЛОЖЕНИЕ": "app-link",
+        "ТАБЛИЦЫ": "tables_links",
         "НАЗАД В МЕНЮ": "main_menu",
     }
 
@@ -152,6 +171,20 @@ LEXICON_btn_price_statistic: dict[str, str] = {
 
 LEXICON_btn_description: dict[str, str] = {
         'НАЗАД В МЕНЮ': 'main_menu',
+    }
+
+LEXICON_btn_back_menu_links: dict[str, str] = {
+        'НАЗАД В МЕНЮ': 'links_main',
+    }
+
+LEXICON_btn_slivki_site_link: dict[str, str] = {
+        'slivki.by': 'https://www.slivki.by',
+        'НАЗАД В МЕНЮ': 'links_main',
+    }
+
+LEXICON_btn_app_link: dict[str, str] = {
+        'slivki.by': 'https://www.slivki.by/prilozhenie-skidok',
+        'НАЗАД В МЕНЮ': 'links_main',
     }
 
 LEXICON_btn_reviews: dict[str, str] = {
