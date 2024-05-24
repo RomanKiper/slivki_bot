@@ -120,10 +120,11 @@ LEXICON_btn_main_links: dict[str, str] = {
         "ИНСТАГРАМ ВСЕ": "insta_all_links",
         "ТИКТОК ВСЕ": "tiktok_all_links",
         "ТЕЛЕГРАМ ВСЕ": "telegram_all_links",
-        "ПРАЙСЫ": "prices_list",
         "ДОГ-Р ОФЕРТЫ": "agreement_links",
         "ПРИЛОЖЕНИЕ": "app-link",
         "ТАБЛИЦЫ": "tables_links",
+        "ПРАЙСЫ": "valable_prices_list",
+        "ПРЕЗЕНТАЦИИ": "presentations_list",
         "НАЗАД В МЕНЮ": "main_menu",
     }
 
@@ -137,6 +138,10 @@ LEXICON_btn_main_admin_menu: dict[str, str] = {
         "Список FAQ": "faq_list",
         "Создать заметку": "add_note",
         "Список заметок": "note_list",
+        "Добавить прайс": "add_price",
+        "Список прайсов": "price_list",
+        "Добавить документ": "add_docoment",
+        "Список документов": "documents_list",
         "Баннер.Добав/измен.": "add_change_banner",
 
     }

@@ -2,7 +2,7 @@ from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from database.models import Product, Category, Banner, Cart, User, Offer, Faq
+from database.models import Product, Category, Banner, Cart, User, Offer, Faq, Price, Document
 
 
 async def orm_add_product(session: AsyncSession(), data: dict):
@@ -231,9 +231,47 @@ async def orm_delete_faq(session: AsyncSession, faq_id: int):
     await session.execute(query)
     await session.commit()
 
+######################### add price ###############################################
+
+async def orm_add_price(session: AsyncSession(), data: dict):
+    obj = Price(
+        name=data['name'],
+        price=data['price'],
+    )
+    session.add(obj)
+    await session.commit()
 
 
+async def orm_get_prices(session: AsyncSession):
+    query = select(Price)
+    result = await session.execute(query)
+    return result.scalars().all()
 
 
+async def orm_delete_price(session: AsyncSession, price_id: int):
+    query = delete(Price).where(Price.id == price_id)
+    await session.execute(query)
+    await session.commit()
 
 
+######################### add document ###############################################
+
+async def orm_add_document(session: AsyncSession(), data: dict):
+    obj = Document(
+        name=data['name'],
+        document=data['document'],
+    )
+    session.add(obj)
+    await session.commit()
+
+
+async def orm_get_documents(session: AsyncSession):
+    query = select(Document)
+    result = await session.execute(query)
+    return result.scalars().all()
+
+
+async def orm_delete_document(session: AsyncSession, document_id: int):
+    query = delete(Document).where(Document.id == document_id)
+    await session.execute(query)
+    await session.commit()

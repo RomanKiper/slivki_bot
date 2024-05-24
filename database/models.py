@@ -80,6 +80,13 @@ class Document(Base):
     document: Mapped[str] = mapped_column(String(150))
 
 
+class Price(Base):
+    __tablename__ = 'prices'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(150), nullable=False)
+    price: Mapped[str] = mapped_column(String(150))
+
 
 class User(Base):
     __tablename__ = "user"

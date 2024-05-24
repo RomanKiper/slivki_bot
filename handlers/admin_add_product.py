@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from filters.chat_types import ChatTypeFilter
 from filters.is_admin import IsAdminMsg
 from database.orm_query import orm_add_product, orm_get_products, orm_delete_product, \
-    orm_update_product, orm_get_product, orm_get_categories, orm_change_banner_image, orm_get_info_pages
+    orm_update_product, orm_get_product, orm_get_categories, orm_change_banner_image, orm_get_info_pages, orm_get_prices
 from keyboards.inline.inline_add_product import get_callback_btns, get_inlineMix_btns
 from lexicon.lexicon import LEXICON_btn_main_admin_menu, LEXICON_RU, LEXICON_btn_back_menu_links
 
@@ -65,6 +65,27 @@ class Add_FAQ(StatesGroup):
         'Add_FAQ:description': 'Введите описание заново:',
     }
 
+
+class Add_price(StatesGroup):
+    # Шаги состояний
+    name = State()
+    price = State()
+
+    texts = {
+        'Add_price:name': 'Введите название прайса или комментарий к прайсу заново:',
+        'Add_price:price': 'Загрузите прайс заново:',
+    }
+
+
+class Add_document(StatesGroup):
+    # Шаги состояний
+    name = State()
+    document = State()
+
+    texts = {
+        'Add_document:name': 'Введите название документа или комментарий к документу заново:',
+        'Add_document:document': 'Загрузите прайс заново:',
+    }
 
 
 @admin_router.message(Command("admin"), F.text| F.command)
@@ -275,7 +296,7 @@ async def add_image(message: types.Message, state: FSMContext, session: AsyncSes
 # Ловим все прочее некорректное поведение для этого состояния
 @admin_router.message(AddProduct.image)
 async def add_image2(message: types.Message, state: FSMContext):
-    await message.answer("Отправьте фото пищи")
+    await message.answer("Отправьте фото.")
 
 
 ################# Микро FSM для загрузки/изменения баннеров ############################
@@ -321,9 +342,23 @@ async def add_banner2(message: types.Message, state: FSMContext):
 async def back_step_handler(message: types.Message, state: FSMContext) -> None:
     current_state = await state.get_state()
 
-    if current_state in (AddProduct.name, AddOffer.name, Add_FAQ.name):
+    if current_state in (AddProduct.name, AddOffer.name, Add_FAQ.name, Add_price.name, Add_document.name):
         await message.answer(
             'Предидущего шага нет, или введите название или напишите "отмена"'
+        )
+        return
+
+    elif current_state == Add_price.price:
+        await state.set_state(Add_price.name)
+        await message.answer(
+            f"Ок, вы вернулись к прошлому шагу \n {Add_price.texts[Add_price.name]}"
+        )
+        return
+
+    elif current_state == Add_document.document:
+        await state.set_state(Add_document.name)
+        await message.answer(
+            f"Ок, вы вернулись к прошлому шагу \n {Add_document.texts[Add_document.name]}"
         )
         return
 
@@ -374,3 +409,11 @@ async def get_tables_links(callback: types.CallbackQuery):
     await callback.message.answer(text=LEXICON_RU['/list_links_work_tables'], disable_web_page_preview=True,
                                   reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
     await callback.message.delete()
+
+
+@admin_router.callback_query(F.data == 'valable_prices_list')
+async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
+    price_file = await orm_get_prices(session)
+    for pr in price_file:
+        await callback.message.answer_document(document=pr.price, caption=f"{pr.name}",
+                                               reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)))
