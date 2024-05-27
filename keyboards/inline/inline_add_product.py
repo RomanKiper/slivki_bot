@@ -47,3 +47,23 @@ def get_inlineMix_btns(
 
     return keyboards.adjust(*sizes).as_markup()
 
+
+
+
+def get_callback_btns_extra_btn(
+        *,  # * означает автоматический запрет на передачу неименованных запретов
+        btns: dict[str, str],
+        sizes: tuple[int] = (1, 2),
+        extra_buttons: list[InlineKeyboardButton] = None  # Добавление параметра для дополнительных кнопок
+) -> InlineKeyboardMarkup:
+
+    keyboards = InlineKeyboardBuilder()
+
+    for text, data in btns.items():
+        keyboards.add(InlineKeyboardButton(text=text, callback_data=data))
+
+    if extra_buttons:
+        for button in extra_buttons:
+            keyboards.add(button)
+
+    return keyboards.adjust(*sizes).as_markup()

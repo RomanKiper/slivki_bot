@@ -8,9 +8,8 @@ from filters.chat_types import ChatTypeFilter
 from filters.is_admin import IsAdminMsg
 from database.orm_query import orm_add_price, orm_get_prices, orm_delete_price, orm_add_document, orm_delete_document, \
     orm_get_documents
-from keyboards.inline.inline_add_product import get_callback_btns
-from lexicon.lexicon import LEXICON_btn_main_admin_menu
-
+from keyboards.inline.inline_add_product import get_callback_btns, get_inlineMix_btns
+from lexicon.lexicon import LEXICON_btn_main_admin_menu, LEXICON_btn_back_menu_links
 
 admin_add_document_price_router = Router()
 admin_add_document_price_router.message.filter(ChatTypeFilter(['private']), IsAdminMsg())
@@ -42,14 +41,27 @@ class Add_document(StatesGroup):
 @admin_add_document_price_router.callback_query(F.data == 'price_list')
 async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
     price_file = await orm_get_prices(session)
+    if len(price_file) > 0:
+        for pr in price_file:
+            await callback.message.answer_document(document=pr.price, caption=f"{pr.name}", reply_markup=get_callback_btns(
+                btns={
+                    "Удалить": f"price_del_{pr.id}",
+                    "Админка": f"admin",
+                },
+                sizes=(2,)
+            ))
+    else:
+        await callback.message.answer(
+            "У вас нет добавленных прайсов.🤔\nДобавьте прайсы через администартивную панель.📝")
+
+
+
+@admin_add_document_price_router.callback_query(F.data == 'valable_prices_list')
+async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
+    price_file = await orm_get_prices(session)
     for pr in price_file:
-        await callback.message.answer_document(document=pr.price, caption=f"{pr.name}", reply_markup=get_callback_btns(
-            btns={
-                "Удалить": f"price_del_{pr.id}",
-                "Админка": f"admin",
-            },
-            sizes=(2,)
-        ))
+        await callback.message.answer_document(document=pr.price, caption=f"{pr.name}",
+                                               reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)))
 
 
 @admin_add_document_price_router.callback_query(F.data.startswith("price_del_"))
@@ -126,14 +138,29 @@ async def add_image2(message: types.Message, state: FSMContext):
 @admin_add_document_price_router.callback_query(F.data == 'documents_list')
 async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
     document_file = await orm_get_documents(session)
-    for dc in document_file:
-        await callback.message.answer_document(document=dc.document, caption=f"{dc.name}", reply_markup=get_callback_btns(
-            btns={
-                "Удалить": f"document_del_{dc.id}",
-                "Админка": f"admin",
-            },
-            sizes=(2,)
-        ))
+    if len(document_file) > 0:
+        for dc in document_file:
+            await callback.message.answer_document(document=dc.document, caption=f"{dc.name}", reply_markup=get_callback_btns(
+                btns={
+                    "Удалить": f"document_del_{dc.id}",
+                    "Админка": f"admin",
+                },
+                sizes=(2,)
+            ))
+    else:
+        await callback.message.answer(
+            "У вас нет добавленных документов.🤔\nДобавьте документы через администартивную панель.📝")
+
+
+@admin_add_document_price_router.callback_query(F.data == 'presentations_list')
+async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
+    document_file = await orm_get_documents(session)
+    if len(document_file) > 0:
+        for dc in document_file:
+            await callback.message.answer_document(document=dc.document, caption=f"{dc.name}", reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)))
+    else:
+        await callback.message.answer(
+            "У вас нет добавленных документов.🤔\nДобавьте документы через администартивную панель.📝")
 
 
 @admin_add_document_price_router.callback_query(F.data.startswith("document_del_"))

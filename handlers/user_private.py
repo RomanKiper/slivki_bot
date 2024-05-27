@@ -1,13 +1,14 @@
 from aiogram import types, Router, F
 from aiogram.filters import CommandStart, Command, or_f
-from aiogram.types import Message, InputMediaPhoto, CallbackQuery
+from aiogram.types import Message, InputMediaPhoto, CallbackQuery, InlineKeyboardButton
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.models import Banner
 from database.orm_query import orm_get_products, orm_get_banner, orm_get_faqs, orm_get_faq
 from filters.chat_types import ChatTypeFilter
-from keyboards.inline.inline_add_product import get_callback_btns, get_url_btns, get_inlineMix_btns
+from keyboards.inline.inline_add_product import get_callback_btns, get_url_btns, get_inlineMix_btns, \
+    get_callback_btns_extra_btn
 # from keyboards.inline.inline_first_menu import create_inline_kb_main_menu
 
 from lexicon.lexicon import LEXICON_btn_main_menu, LEXICON_btn_price_statistic, LEXICON_btn_description, \
@@ -75,7 +76,11 @@ async def hi_cmd(message: types.Message):
 async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
     faqs = await orm_get_faqs(session)
     btns = {faq.name: f'faq2_{faq.id}' for faq in faqs}
-    await callback.message.answer("Часто задаваемые вопросы:", reply_markup=get_callback_btns(btns=btns))
+
+    back_to_main_menu = InlineKeyboardButton(text="Назад", callback_data="main_menu")
+    markup = get_callback_btns_extra_btn(btns=btns, extra_buttons=[back_to_main_menu])
+
+    await callback.message.answer("Часто задаваемые вопросы:", reply_markup=markup)
 
 
 @user_private_router.callback_query(F.data.startswith('faq2_'))
@@ -98,7 +103,7 @@ async def starring_at_product(callback: types.CallbackQuery, session: AsyncSessi
 
 @user_private_router.callback_query(F.data == 'links_main')
 async def get_main_menu_links(callback: types.CallbackQuery):
-    await callback.message.answer(text="Рабочие ссылки компании.", reply_markup=get_callback_btns(btns=LEXICON_btn_main_links, sizes=(1,2,2,2)))
+    await callback.message.answer(text="Рабочие ссылки компании.", reply_markup=get_callback_btns(btns=LEXICON_btn_main_links, sizes=(1,2,2,2,2,1)))
     await callback.message.delete()
 
 

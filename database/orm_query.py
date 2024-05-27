@@ -2,7 +2,7 @@ from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from database.models import Product, Category, Banner, Cart, User, Offer, Faq, Price, Document
+from database.models import Product, Category, Banner, Cart, User, Offer, Faq, Price, Document, Notes
 
 
 async def orm_add_product(session: AsyncSession(), data: dict):
@@ -273,5 +273,35 @@ async def orm_get_documents(session: AsyncSession):
 
 async def orm_delete_document(session: AsyncSession, document_id: int):
     query = delete(Document).where(Document.id == document_id)
+    await session.execute(query)
+    await session.commit()
+
+
+########################## add notes ###################################
+
+async def orm_add_note(session: AsyncSession(), data: dict):
+    obj = Notes(
+        name=data['name'],
+        description=data['description'],
+    )
+    session.add(obj)
+    await session.commit()
+
+
+async def orm_get_notes(session: AsyncSession):
+    query = select(Notes)
+    result = await session.execute(query)
+    return result.scalars().all()
+
+
+async def orm_get_note(session: AsyncSession, note_id: int):
+    query = select(Notes).where(Notes.id == note_id)
+    result = await session.execute(query)
+    return result.scalar()
+
+
+
+async def orm_delete_note(session: AsyncSession, note_id: int):
+    query = delete(Notes).where(Notes.id == note_id)
     await session.execute(query)
     await session.commit()

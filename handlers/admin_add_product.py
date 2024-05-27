@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from filters.chat_types import ChatTypeFilter
 from filters.is_admin import IsAdminMsg
 from database.orm_query import orm_add_product, orm_get_products, orm_delete_product, \
-    orm_update_product, orm_get_product, orm_get_categories, orm_change_banner_image, orm_get_info_pages, orm_get_prices
+    orm_update_product, orm_get_product, orm_get_categories, orm_change_banner_image, orm_get_info_pages
 from keyboards.inline.inline_add_product import get_callback_btns, get_inlineMix_btns
 from lexicon.lexicon import LEXICON_btn_main_admin_menu, LEXICON_RU, LEXICON_btn_back_menu_links
 
@@ -63,6 +63,17 @@ class Add_FAQ(StatesGroup):
     texts = {
         'Add_FAQ:name': 'Введите название заново:',
         'Add_FAQ:description': 'Введите описание заново:',
+    }
+
+
+class AddNote(StatesGroup):
+    # Шаги состояний
+    name = State()
+    description = State()
+
+    texts = {
+        'AddNote:name': 'Введите название заново:',
+        'AddNote:description': 'Введите описание заново:',
     }
 
 
@@ -342,9 +353,16 @@ async def add_banner2(message: types.Message, state: FSMContext):
 async def back_step_handler(message: types.Message, state: FSMContext) -> None:
     current_state = await state.get_state()
 
-    if current_state in (AddProduct.name, AddOffer.name, Add_FAQ.name, Add_price.name, Add_document.name):
+    if current_state in (AddProduct.name, AddOffer.name, Add_FAQ.name, Add_price.name, Add_document.name, AddNote.name):
         await message.answer(
             'Предидущего шага нет, или введите название или напишите "отмена"'
+        )
+        return
+
+    elif current_state == AddNote.description:
+        await state.set_state(AddNote.name)
+        await message.answer(
+            f"Ок, вы вернулись к прошлому шагу \n {AddNote.texts[AddNote.name]}"
         )
         return
 
@@ -410,10 +428,3 @@ async def get_tables_links(callback: types.CallbackQuery):
                                   reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
     await callback.message.delete()
 
-
-@admin_router.callback_query(F.data == 'valable_prices_list')
-async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
-    price_file = await orm_get_prices(session)
-    for pr in price_file:
-        await callback.message.answer_document(document=pr.price, caption=f"{pr.name}",
-                                               reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)))

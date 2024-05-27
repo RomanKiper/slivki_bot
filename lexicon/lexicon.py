@@ -125,6 +125,7 @@ LEXICON_btn_main_links: dict[str, str] = {
         "ТАБЛИЦЫ": "tables_links",
         "ПРАЙСЫ": "valable_prices_list",
         "ПРЕЗЕНТАЦИИ": "presentations_list",
+        "ОПЕРАТИВНАЯ ИНФА": "useful_information",
         "НАЗАД В МЕНЮ": "main_menu",
     }
 
