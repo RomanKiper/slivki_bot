@@ -35,7 +35,7 @@ def get_url_btns(
 def get_inlineMix_btns(
         *,
         btns: dict[str, str],
-        sizes: tuple[int] = (2,)):
+        sizes: tuple[int] = (1,)):
 
     keyboards = InlineKeyboardBuilder()
 
@@ -53,7 +53,7 @@ def get_inlineMix_btns(
 def get_callback_btns_extra_btn(
         *,  # * означает автоматический запрет на передачу неименованных запретов
         btns: dict[str, str],
-        sizes: tuple[int] = (1, 2),
+        sizes: tuple[int] = (1,),
         extra_buttons: list[InlineKeyboardButton] = None  # Добавление параметра для дополнительных кнопок
 ) -> InlineKeyboardMarkup:
 

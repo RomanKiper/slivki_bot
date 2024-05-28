@@ -2,12 +2,13 @@ from aiogram import Router, F, types
 from aiogram.filters import StateFilter
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
+from aiogram.types import InlineKeyboardButton
 from sqlalchemy.ext.asyncio import AsyncSession
 from filters.chat_types import ChatTypeFilter
 from filters.is_admin import IsAdminMsg
 from database.orm_query import orm_delete_faq, orm_get_faq, orm_add_faq, orm_get_faqs, orm_get_note, orm_delete_note, \
     orm_add_note, orm_get_notes
-from keyboards.inline.inline_add_product import get_callback_btns
+from keyboards.inline.inline_add_product import get_callback_btns, get_callback_btns_extra_btn
 from lexicon.lexicon import LEXICON_btn_main_admin_menu
 
 admin_faq_router = Router()
@@ -44,9 +45,12 @@ async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
     notes = await orm_get_notes(session)
     if len(notes) > 0:
         btns = {note.name: f'note_{note.id}' for note in notes}
-        await callback.message.answer("Оперативная информация:", reply_markup=get_callback_btns(btns=btns))
+        back_to_main_menu = InlineKeyboardButton(text="НАЗАД", callback_data="admin")
+        markup = get_callback_btns_extra_btn(btns=btns, extra_buttons=[back_to_main_menu])
+        await callback.message.answer("Оперативная информация:", reply_markup=markup)
     else:
-        await callback.message.answer("Нет оперативной информации🤔.\nДобавьте информацию через администартивную панель.📝")
+        await callback.message.answer("Нет заметок🤔.\nДобавьте информацию через администартивную панель.📝")
+
 
 
 @admin_faq_router.callback_query(F.data.startswith('note_'))
@@ -65,6 +69,38 @@ async def starring_at_notes(callback: types.CallbackQuery, session: AsyncSession
         ),
     )
     await callback.answer()
+
+################################## note list без функции удаления ############
+
+@admin_faq_router.callback_query(F.data == 'useful_information')
+async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
+    notes = await orm_get_notes(session)
+    if len(notes) > 0:
+        btns = {note.name: f'note2_{note.id}' for note in notes}
+        back_to_main_menu = InlineKeyboardButton(text="НАЗАД", callback_data="links_main")
+        markup = get_callback_btns_extra_btn(btns=btns, extra_buttons=[back_to_main_menu])
+        await callback.message.answer("Оперативная информация:", reply_markup=markup)
+    else:
+        await callback.message.answer("Нет заметок🤔.\nДобавьте информацию через администартивную панель.📝")
+
+
+@admin_faq_router.callback_query(F.data.startswith('note2_'))
+async def starring_at_notes(callback: types.CallbackQuery, session: AsyncSession):
+    note_id = callback.data.split('_')[-1]
+    note_item = await orm_get_note(session, int(note_id))
+    await callback.message.answer(
+        f"<strong>{note_item.name}</strong>\n\n"
+        f"{note_item.description}\n\n",
+        reply_markup=get_callback_btns(
+            btns={
+                "Назад": f"useful_information",
+            },
+            sizes=(1,)
+        ),
+    )
+    await callback.answer()
+
+##############################################################
 
 
 @admin_faq_router.callback_query(F.data.startswith("not_delete_"))
@@ -138,8 +174,6 @@ async def add_description2(message: types.Message, state: FSMContext):
     await message.answer("Вы ввели не допустимые данные, введите текст блока информации!")
 
 
-
-
 ################################ add faq ############################################################
 
 @admin_faq_router.callback_query(F.data == 'faq_list')
@@ -147,7 +181,9 @@ async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
     faqs = await orm_get_faqs(session)
     if len(faqs) > 0:
         btns = {faq.name: f'faq_{faq.id}' for faq in faqs}
-        await callback.message.answer("Часто задаваемые вопросы:", reply_markup=get_callback_btns(btns=btns))
+        back_to_main_menu = InlineKeyboardButton(text="НАЗАД", callback_data="admin")
+        markup = get_callback_btns_extra_btn(btns=btns, extra_buttons=[back_to_main_menu])
+        await callback.message.answer("Часто задаваемые вопросы:", reply_markup=markup)
     else:
         await callback.message.answer("Список часто задаваемых вопросв пуст🤔.\nДобавьте вопросы через администартивную панель.📝")
 
@@ -224,12 +260,10 @@ async def add_description(message: types.Message, state: FSMContext, session: As
         return
     await state.update_data(description=message.text)
     data = await state.get_data()
-
     try:
         await orm_add_faq(session, data)
         await message.answer("Часто задаваемый вопрос добавлен 👍", reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
         await state.clear()
-
     except Exception as e:
         await message.answer(
             f"Ошибка: \n{str(e)}\nОбратись к программеру, он опять денег хочет", sizes=(2,))

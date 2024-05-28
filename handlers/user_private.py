@@ -75,12 +75,14 @@ async def hi_cmd(message: types.Message):
 @user_private_router.callback_query(F.data == 'faq_main')
 async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
     faqs = await orm_get_faqs(session)
-    btns = {faq.name: f'faq2_{faq.id}' for faq in faqs}
+    if len(faqs) > 0:
+        btns = {faq.name: f'faq2_{faq.id}' for faq in faqs}
+        back_to_main_menu = InlineKeyboardButton(text="НАЗАД", callback_data="main_menu")
+        markup = get_callback_btns_extra_btn(btns=btns, extra_buttons=[back_to_main_menu])
+        await callback.message.answer("Часто задаваемые вопросы:", reply_markup=markup)
+    else:
+        await callback.message.answer("Список часто задаваемых вопросв пуст🤔.\nДобавьте вопросы через администартивную панель.📝")
 
-    back_to_main_menu = InlineKeyboardButton(text="Назад", callback_data="main_menu")
-    markup = get_callback_btns_extra_btn(btns=btns, extra_buttons=[back_to_main_menu])
-
-    await callback.message.answer("Часто задаваемые вопросы:", reply_markup=markup)
 
 
 @user_private_router.callback_query(F.data.startswith('faq2_'))
