@@ -12,6 +12,7 @@ from lexicon.lexicon_for_db import categories, description_for_info_pages
 
 
 from handlers.user_private import user_private_router
+from handlers.price_statistic.advert_site import user_advert_router
 from handlers.user_group import user_group_router
 from handlers.admin_add_product import admin_router
 from handlers.admin_make_offer import admin_offer_router
@@ -30,6 +31,7 @@ bot = Bot(token=config.tg_bot.token, parse_mode="HTML")
 dp = Dispatcher()
 
 dp.include_router(user_private_router)
+dp.include_router(user_advert_router)
 dp.include_router(admin_router)
 dp.include_router(admin_offer_router)
 dp.include_router(admin_faq_router)

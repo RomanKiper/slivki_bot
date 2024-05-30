@@ -36,9 +36,9 @@ LEXICON_RU: dict[str, str] = {
     ,
 
     '/office_adress':
-        "Адрес:\nг.Минск, Центральный район, Победителей проспект. 7а.\n"
-        "Бизнес-центр Royal Plaza (Роял Плаза).\n"
-        "29 - 30 этаж.\n",
+        "Адрес:\nг. Минск, Проспект Независимости, 32А, строение 4\n"
+        "БЦ 'Проспект' \n"
+        "6 этаж\n",
 
     '/description': '😎Bun_bot - вертуальный специалит по качественному продвижению в компании Сливки бай.\n'
                     '😎Bun_bot даст вам  цены на услуги компании, статистику, покажет примеры,'
@@ -126,7 +126,7 @@ LEXICON_btn_main_links: dict[str, str] = {
         "ПРИЛОЖЕНИЕ": "app-link",
         "ТАБЛИЦЫ": "tables_links",
         "ПРАЙСЫ": "valable_prices_list",
-        "ПРЕЗЕНТАЦИИ": "presentations_list",
+        "ДОКУМЕНТЫ": "presentations_list",
         "ОПЕРАТИВНАЯ ИНФОРМАЦИЯ": "useful_information",
         "НАЗАД В МЕНЮ": "main_menu",
     }
@@ -177,7 +177,7 @@ LEXICON_btn_price_statistic: dict[str, str] = {
         'НАЗАД В МЕНЮ': 'main_menu',
     }
 
-LEXICON_btn_description: dict[str, str] = {
+LEXICON_btn_back_to_main_menu: dict[str, str] = {
         'НАЗАД В МЕНЮ': 'main_menu',
     }
 
@@ -243,7 +243,8 @@ LEXICON_PRICE: dict[str, str] = {
                     '💵1 выход - 798 руб.\n'
                     '<a href="https://t.me/slivki_by">Ссылка на telegram</a>\n',
 
-    'first_photo': "AgACAgIAAxkBAAIQLGVRE7NaXH5M8hyJOWivDtaFwtLfAAJt1TEbASOISq_5Ki2Jo-B-AQADAgADcwADMwQ",
+    'first_photo': "AgACAgIAAxkBAAIpcGZY8z8F46Y7qileiRw_uwABL7BfiwACI-AxG7aJyUokf50DaYBKbwEAAwIAA3MAAzUE",
+    # 'first_photo': "AgACAgIAAxkBAAIQLGVRE7NaXH5M8hyJOWivDtaFwtLfAAJt1TEbASOISq_5Ki2Jo-B-AQADAgADcwADMwQ",
     'first_photo_info': '❗36 000+ уникальных пользователей в день.\n'
                         '❗11 000+ компаний партнеров за все время.\n'
                         '❗695 000+ уникальных пользователей в месяц.\n'

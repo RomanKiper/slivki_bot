@@ -1,21 +1,17 @@
-from aiogram import types, Router, F
-from aiogram.filters import CommandStart, Command, or_f
-from aiogram.types import Message, InputMediaPhoto, CallbackQuery, InlineKeyboardButton
+from aiogram import types, Router, F, Bot
+from aiogram.filters import CommandStart, Command
+from aiogram.types import CallbackQuery, InlineKeyboardButton, Message
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from database.models import Banner
-from database.orm_query import orm_get_products, orm_get_banner, orm_get_faqs, orm_get_faq
+from database.orm_query import orm_get_faqs, orm_get_faq
 from filters.chat_types import ChatTypeFilter
-from keyboards.inline.inline_add_product import get_callback_btns, get_url_btns, get_inlineMix_btns, \
+from keyboards.inline.inline_add_product import get_callback_btns, get_inlineMix_btns, \
     get_callback_btns_extra_btn
-# from keyboards.inline.inline_first_menu import create_inline_kb_main_menu
-
-from lexicon.lexicon import LEXICON_btn_main_menu, LEXICON_btn_price_statistic, LEXICON_btn_description, \
-    LEXICON_btn_main_links, LEXICON_btn_slivki_site_link, LEXICON_btn_back_menu_links, LEXICON_btn_app_link
-
+from lexicon.lexicon import LEXICON_btn_main_menu, LEXICON_btn_price_statistic, \
+    LEXICON_btn_main_links, LEXICON_btn_slivki_site_link, LEXICON_btn_back_menu_links, LEXICON_btn_app_link, \
+    LEXICON_btn_back_to_main_menu
 from lexicon.lexicon import LEXICON_HI, LEXICON_RU
-
 
 user_private_router = Router()
 user_private_router.message.filter(ChatTypeFilter(['private']))
@@ -56,7 +52,7 @@ async def get_list_advertising_menu(callback: types.CallbackQuery):
 
 @user_private_router.callback_query(F.data == 'about')
 async def get_info_about(callback: types.CallbackQuery):
-    await callback.message.answer(text=LEXICON_RU['/description_slivki'], reply_markup=get_callback_btns(btns=LEXICON_btn_description, sizes=(2,)))
+    await callback.message.answer(text=LEXICON_RU['/description_slivki'], reply_markup=get_callback_btns(btns=LEXICON_btn_back_to_main_menu, sizes=(2,)))
     await callback.message.delete()
 
 
@@ -157,3 +153,30 @@ async def get_agreement_links(callback: types.CallbackQuery):
 #     await callback.message.answer(text=LEXICON_RU['/list_links_work_tables'], disable_web_page_preview=True,
 #                                   reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
 #     await callback.message.delete()
+
+
+###################################################################
+
+@user_private_router.callback_query(F.data == 'contacts_main')
+async def inline_get_office_information(callback: types.CallbackQuery, bot: Bot):
+    await bot.send_location(chat_id=callback.from_user.id,
+                            latitude=53.904278,
+                            longitude=27.569655)
+    await callback.message.answer(text=LEXICON_RU['/office_adress'],
+                                  reply_markup=get_callback_btns(btns=LEXICON_btn_back_to_main_menu, sizes=(2,)))
+    await callback.message.delete()
+
+
+@user_private_router.message()
+async def send_echo(message: Message):
+    try:
+        if message.photo:
+            await message.send_copy(chat_id=message.chat.id)
+            photo_id = message.photo[0].file_id
+            await message.answer(f"ID фотографии: {photo_id}")
+        elif message.video:
+            await message.send_copy(chat_id=message.chat.id)
+            video_id = message.video.file_id
+            await message.answer(f"ID видео: {video_id}")
+    except TypeError:
+        await message.reply(text=LEXICON_RU['no_echo'])

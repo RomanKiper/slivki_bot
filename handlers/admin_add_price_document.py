@@ -55,13 +55,16 @@ async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
             "У вас нет добавленных прайсов.🤔\nДобавьте прайсы через администартивную панель.📝")
 
 
-
 @admin_add_document_price_router.callback_query(F.data == 'valable_prices_list')
 async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
     price_file = await orm_get_prices(session)
-    for pr in price_file:
-        await callback.message.answer_document(document=pr.price, caption=f"{pr.name}",
-                                               reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)))
+    if len(price_file) > 0:
+        for pr in price_file:
+            await callback.message.answer_document(document=pr.price, caption=f"{pr.name}",
+                                                   reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)))
+    else:
+        await callback.message.answer(
+            "У вас нет добавленных прайсов.🤔\nДобавьте прайсы через администартивную панель.📝")
 
 
 @admin_add_document_price_router.callback_query(F.data.startswith("price_del_"))
@@ -133,7 +136,6 @@ async def add_image2(message: types.Message, state: FSMContext):
 
 
 #################################### Обработчики документов ######################################
-
 
 @admin_add_document_price_router.callback_query(F.data == 'documents_list')
 async def admin_features(callback: types.CallbackQuery, session: AsyncSession):

@@ -109,7 +109,7 @@ async def admin_handler(message_or_callback: types.Union[types.Message, Callback
     elif isinstance(message_or_callback, CallbackQuery):
         # Если это колбэк-запрос
         callback_query = message_or_callback
-        await callback_query.message.answer(text="Добавте товар👇", reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
+        await callback_query.message.answer(text=LEXICON_RU["/admin+panel"], reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
 
 
 @admin_router.callback_query(F.data == 'products_list')
