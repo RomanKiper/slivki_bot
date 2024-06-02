@@ -10,7 +10,7 @@ from keyboards.inline.inline_add_product import get_callback_btns, get_inlineMix
     get_callback_btns_extra_btn
 from lexicon.lexicon import LEXICON_btn_main_menu, LEXICON_btn_price_statistic, \
     LEXICON_btn_main_links, LEXICON_btn_slivki_site_link, LEXICON_btn_back_menu_links, LEXICON_btn_app_link, \
-    LEXICON_btn_back_to_main_menu
+    LEXICON_btn_back_to_main_menu, LEXICON_btn_back_to_advertising_menu
 from lexicon.lexicon import LEXICON_HI, LEXICON_RU
 
 user_private_router = Router()
@@ -46,7 +46,8 @@ async def start_cmd(message_or_callback: types.Union[types.Message, CallbackQuer
 @user_private_router.callback_query(F.data == 'price_statistic')
 async def get_list_advertising_menu(callback: types.CallbackQuery):
 
-    await callback.message.answer(text="text", reply_markup=get_callback_btns(btns=LEXICON_btn_price_statistic, sizes=(2,)))
+    await callback.message.answer(text="В данном блоке ты получшиь цены, статистику и примеры размещения рекламы.",
+                                  reply_markup=get_callback_btns(btns=LEXICON_btn_price_statistic, sizes=(2,)))
     await callback.message.delete()
 
 
@@ -129,7 +130,7 @@ async def get_all_insta_links(callback: types.CallbackQuery):
 @user_private_router.message(Command('insta_links'))
 async def get_all_insta_links(message: types.Message):
     await message.answer(text=LEXICON_RU['/insta_links'], disable_web_page_preview=True,
-                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_to_advertising_menu, sizes=(1,)) )
     await message.delete()
 
 
@@ -138,6 +139,13 @@ async def get_all_tiktok_links(callback: types.CallbackQuery):
     await callback.message.answer(text=LEXICON_RU['/tiktok_links'], disable_web_page_preview=True,
                                   reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
     await callback.message.delete()
+
+
+@user_private_router.message(Command('tiktok_links'))
+async def get_all_tiktok_links(message: types.Message):
+    await message.answer(text=LEXICON_RU['/tiktok_links'], disable_web_page_preview=True,
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_to_advertising_menu, sizes=(1,)) )
+    await message.delete()
 
 
 @user_private_router.callback_query(F.data == 'telegram_all_links')
@@ -173,17 +181,17 @@ async def inline_get_office_information(callback: types.CallbackQuery, bot: Bot)
                                   reply_markup=get_callback_btns(btns=LEXICON_btn_back_to_main_menu, sizes=(2,)))
     await callback.message.delete()
 
-#
-# @user_private_router.message()
-# async def send_echo(message: Message):
-#     try:
-#         if message.photo:
-#             await message.send_copy(chat_id=message.chat.id)
-#             photo_id = message.photo[0].file_id
-#             await message.answer(f"ID фотографии: {photo_id}")
-#         elif message.video:
-#             await message.send_copy(chat_id=message.chat.id)
-#             video_id = message.video.file_id
-#             await message.answer(f"ID видео: {video_id}")
-#     except TypeError:
-#         await message.reply(text=LEXICON_RU['no_echo'])
+
+@user_private_router.message()
+async def send_echo(message: Message):
+    try:
+        if message.photo:
+            await message.send_copy(chat_id=message.chat.id)
+            photo_id = message.photo[0].file_id
+            await message.answer(f"ID фотографии: {photo_id}")
+        elif message.video:
+            await message.send_copy(chat_id=message.chat.id)
+            video_id = message.video.file_id
+            await message.answer(f"ID видео: {video_id}")
+    except TypeError:
+        await message.reply(text=LEXICON_RU['no_echo'])
