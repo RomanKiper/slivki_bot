@@ -126,6 +126,13 @@ async def get_all_insta_links(callback: types.CallbackQuery):
     await callback.message.delete()
 
 
+@user_private_router.message(Command('insta_links'))
+async def get_all_insta_links(message: types.Message):
+    await message.answer(text=LEXICON_RU['/insta_links'], disable_web_page_preview=True,
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
+    await message.delete()
+
+
 @user_private_router.callback_query(F.data == 'tiktok_all_links')
 async def get_all_tiktok_links(callback: types.CallbackQuery):
     await callback.message.answer(text=LEXICON_RU['/tiktok_links'], disable_web_page_preview=True,
@@ -166,17 +173,17 @@ async def inline_get_office_information(callback: types.CallbackQuery, bot: Bot)
                                   reply_markup=get_callback_btns(btns=LEXICON_btn_back_to_main_menu, sizes=(2,)))
     await callback.message.delete()
 
-
-@user_private_router.message()
-async def send_echo(message: Message):
-    try:
-        if message.photo:
-            await message.send_copy(chat_id=message.chat.id)
-            photo_id = message.photo[0].file_id
-            await message.answer(f"ID фотографии: {photo_id}")
-        elif message.video:
-            await message.send_copy(chat_id=message.chat.id)
-            video_id = message.video.file_id
-            await message.answer(f"ID видео: {video_id}")
-    except TypeError:
-        await message.reply(text=LEXICON_RU['no_echo'])
+#
+# @user_private_router.message()
+# async def send_echo(message: Message):
+#     try:
+#         if message.photo:
+#             await message.send_copy(chat_id=message.chat.id)
+#             photo_id = message.photo[0].file_id
+#             await message.answer(f"ID фотографии: {photo_id}")
+#         elif message.video:
+#             await message.send_copy(chat_id=message.chat.id)
+#             video_id = message.video.file_id
+#             await message.answer(f"ID видео: {video_id}")
+#     except TypeError:
+#         await message.reply(text=LEXICON_RU['no_echo'])
