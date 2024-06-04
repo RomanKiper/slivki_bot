@@ -2,10 +2,25 @@ from aiogram import Router, F, types, Bot
 from aiogram.types import Message, InputMediaPhoto, InlineKeyboardButton, InlineKeyboardMarkup
 
 from filters.chat_types import ChatTypeFilter
-from lexicon.lexicon import LEXICON_PRICE, LEXICON_PROMOCOD_INFO
+from keyboards.inline.inline_add_product import get_inlineMix_btns
+from lexicon.lexicon import LEXICON_PRICE, LEXICON_PROMOCOD_INFO, LEXICON_btn_back_to_advertising_menu
 
 user_advert_router = Router()
 user_advert_router.message.filter(ChatTypeFilter(['private']))
+
+
+#################### telegram #########################
+
+@user_advert_router.callback_query(F.data == 'telegram_sl')
+async def on_start_telegram(message: Message, bot: Bot):
+    await bot.send_photo(chat_id=message.from_user.id,
+                         photo=LEXICON_PRICE['photo_telejka'],
+                         caption=LEXICON_PRICE['telejka_info'],
+                         reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_to_advertising_menu, sizes=(1,))
+    )
+
+##########################site###########################
+
 
 first_photo = LEXICON_PRICE['first_photo']
 photo_podlojka = LEXICON_PRICE['photo_podlojka']
@@ -20,9 +35,9 @@ brendbox_premium = LEXICON_PRICE["brendbox_premium"]
 
 
 # Список ID фотографий
-photo_ids = [first_photo, photo_podlojka, banner_top, brendbox, brendbox_heading, brendbox_heading_new, floating, banner_horizontal, advertising_news,  brendbox_premium]
+photo_site_ids = [first_photo, photo_podlojka, banner_top, brendbox, brendbox_heading, brendbox_heading_new, floating, banner_horizontal, advertising_news,  brendbox_premium]
 
-caption_dict = {
+caption_site_dict = {
     first_photo: LEXICON_PRICE['first_photo_info'],
     photo_podlojka: LEXICON_PRICE['podlojka_info'],
     banner_top: LEXICON_PRICE['banner_top_info'],
@@ -35,7 +50,7 @@ caption_dict = {
     brendbox_premium: LEXICON_PRICE['brendbox_premium_info'],
 }
 
-current_photo_index = 0
+current_photo_site = 0
 
 button_next = InlineKeyboardButton(
     text='ВПЕРЕД',
@@ -59,21 +74,21 @@ markup_prev_next = InlineKeyboardMarkup(inline_keyboard=keyboard_prev_next)
 @user_advert_router.callback_query(F.data == 'site_slivki_advertising')
 async def on_start(message: Message, bot: Bot):
     await bot.send_photo(chat_id=message.from_user.id,
-                         photo=photo_ids[current_photo_index],
-                         caption=caption_dict[photo_ids[current_photo_index]],
+                         photo=photo_site_ids[current_photo_site],
+                         caption=caption_site_dict[photo_site_ids[current_photo_site]],
                          reply_markup=markup_prev_next)
 
 
 # Обработчик инлайн кнопки "Следующее фото"
 @user_advert_router.callback_query(lambda callback_query: callback_query.data == 'next_photo')
 async def on_next_photo(callback: types.CallbackQuery, bot: Bot):
-    global current_photo_index
-    current_photo_index = (current_photo_index + 1) % len(photo_ids)
+    global current_photo_site
+    current_photo_site = (current_photo_site + 1) % len(photo_site_ids)
     await bot.edit_message_media(chat_id=callback.message.chat.id,
                                  message_id=callback.message.message_id,
                                  media=InputMediaPhoto(
-                                     media=photo_ids[current_photo_index],
-                                     caption=caption_dict[photo_ids[current_photo_index]],
+                                     media=photo_site_ids[current_photo_site],
+                                     caption=caption_site_dict[photo_site_ids[current_photo_site]],
                                  ),
                                  reply_markup=markup_prev_next)
 
@@ -81,24 +96,24 @@ async def on_next_photo(callback: types.CallbackQuery, bot: Bot):
 # Обработчик инлайн кнопки "Предыдущее фото"
 @user_advert_router.callback_query(lambda callback_query: callback_query.data == 'prev_photo')
 async def on_prev_photo(callback: types.CallbackQuery, bot: Bot):
-    global current_photo_index
-    current_photo_index = (current_photo_index - 1) % len(photo_ids)
+    global current_photo_site
+    current_photo_site = (current_photo_site - 1) % len(photo_site_ids)
     await bot.edit_message_media(chat_id=callback.message.chat.id,
                                  message_id=callback.message.message_id,
                                  media=InputMediaPhoto(
-                                     media=photo_ids[current_photo_index],
-                                     caption=caption_dict[photo_ids[current_photo_index]],
+                                     media=photo_site_ids[current_photo_site],
+                                     caption=caption_site_dict[photo_site_ids[current_photo_site]],
                                  ),
                                  reply_markup=markup_prev_next)
 
 
 ################################# insta ################################
 
-from aiogram import Router, F, types, Bot
-from aiogram.types import Message, InputMediaPhoto, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
-from lexicon.lexicon import LEXICON_PRICE, LEXICON_btn_main_menu
-
-router = Router()
+# from aiogram import Router, F, types, Bot
+# from aiogram.types import Message, InputMediaPhoto, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
+# from lexicon.lexicon import LEXICON_PRICE, LEXICON_btn_main_menu
+#
+# router = Router()
 
 insta1 = LEXICON_PRICE['insta1']
 insta2 = LEXICON_PRICE['insta2']
@@ -108,9 +123,9 @@ insta5 = LEXICON_PRICE['insta5']
 
 
 # Список ID фотографий
-photo_ids = [insta1, insta2, insta3, insta4, insta5]
+photo_insta_id = [insta1, insta2, insta3, insta4, insta5]
 
-caption_dict = {
+caption_insta_dict = {
     insta1: LEXICON_PRICE['insta_info1'],
     insta2: LEXICON_PRICE['insta_info2'],
     insta3: LEXICON_PRICE['insta_info3'],
@@ -118,7 +133,7 @@ caption_dict = {
     insta5: LEXICON_PRICE['insta_info5'],
 }
 
-current_photo_index = 0
+current_photo_insta = 0
 
 button_next = InlineKeyboardButton(
     text='ВПЕРЕД',
@@ -140,24 +155,23 @@ markup_prev_next_insta = InlineKeyboardMarkup(inline_keyboard=keyboard_prev_next
 
 
 @user_advert_router.callback_query(F.data == 'instagram_sl')
-# async def on_start(message: Message, bot: Bot):
 async def on_start(message: Message, bot: Bot):
     await bot.send_photo(chat_id=message.from_user.id,
-                         photo=photo_ids[current_photo_index],
-                         caption=caption_dict[photo_ids[current_photo_index]],
+                         photo=photo_insta_id[current_photo_insta],
+                         caption=caption_insta_dict[photo_insta_id[current_photo_insta]],
                          reply_markup=markup_prev_next_insta)
 
 
 # Обработчик инлайн кнопки "Следующее фото"
 @user_advert_router.callback_query(lambda callback_query: callback_query.data == 'next_photo_insta')
 async def on_next_photo(callback: types.CallbackQuery, bot: Bot):
-    global current_photo_index
-    current_photo_index = (current_photo_index + 1) % len(photo_ids)
+    global current_photo_insta
+    current_photo_insta = (current_photo_insta + 1) % len(photo_insta_id)
     await bot.edit_message_media(chat_id=callback.message.chat.id,
                                  message_id=callback.message.message_id,
                                  media=InputMediaPhoto(
-                                     media=photo_ids[current_photo_index],
-                                     caption=caption_dict[photo_ids[current_photo_index]],
+                                     media=photo_insta_id[current_photo_insta],
+                                     caption=caption_insta_dict[photo_insta_id[current_photo_insta]],
                                  ),
                                  reply_markup=markup_prev_next_insta)
 
@@ -165,13 +179,13 @@ async def on_next_photo(callback: types.CallbackQuery, bot: Bot):
 # Обработчик инлайн кнопки "Предыдущее фото"
 @user_advert_router.callback_query(lambda callback_query: callback_query.data == 'prev_photo_insta')
 async def on_prev_photo(callback: types.CallbackQuery, bot: Bot):
-    global current_photo_index
-    current_photo_index = (current_photo_index - 1) % len(photo_ids)
+    global current_photo_insta
+    current_photo_insta = (current_photo_insta - 1) % len(photo_insta_id)
     await bot.edit_message_media(chat_id=callback.message.chat.id,
                                  message_id=callback.message.message_id,
                                  media=InputMediaPhoto(
-                                     media=photo_ids[current_photo_index],
-                                     caption=caption_dict[photo_ids[current_photo_index]],
+                                     media=photo_insta_id[current_photo_insta],
+                                     caption=caption_insta_dict[photo_insta_id[current_photo_insta]],
                                  ),
                                  reply_markup=markup_prev_next_insta)
 
@@ -180,11 +194,9 @@ async def on_prev_photo(callback: types.CallbackQuery, bot: Bot):
 tiktok1 = LEXICON_PRICE['tiktok1']
 tiktok2 = LEXICON_PRICE['tiktok2']
 
+text_tiktok = [tiktok1, tiktok2]
 
-
-text_pages = [tiktok1, tiktok2]
-
-current_text_index = 0
+current_text_tiktok = 0
 
 button_next = InlineKeyboardButton(
     text='Далее',
@@ -208,18 +220,18 @@ markup_prev_next_tik_tik = InlineKeyboardMarkup(inline_keyboard=keyboard_prev_ne
 @user_advert_router.callback_query(F.data == 'tiktok_sl')
 async def on_start(message: Message, bot: Bot):
     await bot.send_message(chat_id=message.from_user.id,
-                           text=text_pages[current_text_index],
+                           text=text_tiktok[current_text_index],
                            reply_markup=markup_prev_next_tik_tik)
 
 
 # Обработчик инлайн кнопки "Следующеая страница"
 @user_advert_router.callback_query(lambda callback_query: callback_query.data == 'next_page_tik')
 async def on_next_photo(callback: types.CallbackQuery, bot: Bot):
-    global current_text_index
-    current_text_index = (current_text_index + 1) % len(text_pages)
+    global current_text_tiktok
+    current_text_tiktok = (current_text_tiktok + 1) % len(text_tiktok)
     await bot.edit_message_text(chat_id=callback.message.chat.id,
                                 message_id=callback.message.message_id,
-                                text=text_pages[current_text_index],
+                                text=text_tiktok[current_text_tiktok],
                                 reply_markup=markup_prev_next_tik_tik,
                                 disable_web_page_preview=True)
 
@@ -227,11 +239,11 @@ async def on_next_photo(callback: types.CallbackQuery, bot: Bot):
 # Обработчик инлайн кнопки "Предыдущий техт"
 @user_advert_router.callback_query(lambda callback_query: callback_query.data == 'prev_page_tik')
 async def on_prev_photo(callback: types.CallbackQuery, bot: Bot):
-    global current_text_index
-    current_text_index = (current_text_index - 1) % len(text_pages)
+    global current_text_tiktok
+    current_text_tiktok = (current_text_tiktok - 1) % len(text_tiktok)
     await bot.edit_message_text(chat_id=callback.message.chat.id,
                                 message_id=callback.message.message_id,
-                                text=text_pages[current_text_index],
+                                text=text_tiktok[current_text_tiktok],
                                 reply_markup=markup_prev_next_tik_tik,
                                 disable_web_page_preview=True)
 

@@ -236,11 +236,7 @@ LEXICON_btn_reviews: dict[str, str] = {
 }
 
 LEXICON_PRICE: dict[str, str] = {
-    'photo_telega': 'Следующее фото',
-    'btn_main_menu_1': 'Назад в меню',
-    'manager': 'Менедж🤓р',
-    'photo_telejka1': 'AgACAgIAAxkBAAIVnWV_WWmU1Ul6igGnYCW8xkgF2B2kAAJl1DEbenr5S1NmyoDaJlKbAQADAgADcwADMwQ',
-    'photo_tekejka2': 'AgACAgIAAxkBAAIP32VQxP_m8psGQI4jDsHz_ORUjZrLAAIa0zEbASOISqKwIV5RRk0UAQADAgADcwADMwQ',
+    'photo_telejka': 'AgACAgIAAxkBAAIrbWZfhToFlihW-GQu1LpoJNS6eL2uAAJy4TEb49v5SvmGOBkuOMOwAQADAgADcwADNQQ',
     'telejka_info': '<b>Пост в телеграм канале Скидки Беларуси.</b>\n'
                     '✅Количество подписчиков - 46 000.\n'
                     '✅Количество просмотров - более 10 000.\n\n'
