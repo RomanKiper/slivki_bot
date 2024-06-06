@@ -319,11 +319,11 @@ LEXICON_PRICE: dict[str, str] = {
                               '✅Клики - 356 \n'
                               '💵1 выход(сутки) - 298.8 руб.\n',
 
-    'insta1': 'AgACAgIAAxkBAAIp9mZcnK4_nOF3gTknxQ_aBMGsPzf2AAKV5DEboD_oSnMcP2KWwEz3AQADAgADcwADNQQ',
-    'insta2': 'AgACAgIAAxkBAAIp-WZcnLm7d6WmCn5_v8Ky-nhiYjIOAAKW5DEboD_oSvlYpEGSX0YDAQADAgADcwADNQQ',
-    'insta3': 'AgACAgIAAxkBAAIp_GZcnMJ9VkqWSw5cvCK0utbA3B4aAAKY5DEboD_oSucODgOCqfYJAQADAgADcwADNQQ',
-    'insta4': 'AgACAgIAAxkBAAIp_2ZcnNIkvYZGf_ufbbe7sY-PNRNgAAKZ5DEboD_oSj4vPN64QqwQAQADAgADcwADNQQ',
-    'insta5': 'AgACAgIAAxkBAAIqAmZcnN7_Q-qZZaJwj5dsCCbME8pjAAKb5DEboD_oSt63fPTXPwqrAQADAgADcwADNQQ',
+    'insta1': 'AgACAgIAAxkBAAIqcmZiHdySnMx0T4DMpKd_CUgKj3wTAAJG3DEbZGYRS2PtLPrBo8l3AQADAgADcwADNQQ',
+    'insta2': 'AgACAgIAAxkBAAIqdWZiHgwkdsx-J4LBXyFxTDk7j2zPAAJH3DEbZGYRS8nzP9XL0BEqAQADAgADcwADNQQ',
+    'insta3': 'AgACAgIAAxkBAAIqeGZiHhZ-q-krkck5XMUIkDCVWT5WAAJI3DEbZGYRS5a9HalMG2GNAQADAgADcwADNQQ',
+    'insta4': 'AgACAgIAAxkBAAIqe2ZiHiAu_06FlENjHAclICaIwrE_AAJJ3DEbZGYRSy-WDZvncz0KAQADAgADcwADNQQ',
+    'insta5': 'AgACAgIAAxkBAAIqfmZiHipUsdXmRM-SCVu0erWug0FLAAJL3DEbZGYRS5GanEt3ykRJAQADAgADcwADNQQ',
     'insta_info1': '<b>Cеть инстаграм Сливки бай:</b>\n'
                   '✅Больше 700 000 подписчиков.\n'
                   '✅30 блогеров в штате.\n'
