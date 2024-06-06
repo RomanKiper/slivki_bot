@@ -243,12 +243,12 @@ LEXICON_PRICE: dict[str, str] = {
                     '💵1 выход - 798 руб.\n'
                     '<a href="https://t.me/slivki_by">Ссылка на telegram</a>\n',
 
-    'first_photo': "AgACAgIAAxkBAAIpj2ZaHS6Nug2C3QmIih30DN9PejQsAAJ84TEbxpHQSloJLuVERBHmAQADAgADcwADNQQ",
+    'first_photo': "AgACAgIAAxkBAAIqomZiKTMXRp9mxIu0YWulQdpx6e_DAAKq3DEbZGYRS9faoXCCx-_jAQADAgADcwADNQQ",
     'first_photo_info': '❗36 000+ уникальных пользователей в день.\n'
                         '❗11 000+ компаний партнеров за все время.\n'
                         '❗695 000+ уникальных пользователей в месяц.\n'
                         '<a href="https://www.slivki.by/">Ссылка на сайт</a>\n',
-    'photo_podlojka': 'AgACAgIAAxkBAAIpl2ZaHqxHK9YIlmUIaCaEgAF2eHRdAAKQ4TEbxpHQSgn-sCOn-OA7AQADAgADcwADNQQ',
+    'photo_podlojka': 'AgACAgIAAxkBAAIqpWZiKX5J1DfoQ2Dy3qsYSCpKmdOhAAKs3DEbZGYRS4KCL_vrDDwFAQADAgADcwADNQQ',
     'podlojka_info': '<b>Брендированная подложка.</b> Дублируется в мобильной версии сайта.\n'
                      '✅CTR - 0.17%|CPM-1.65 руб.\n'
                      '✅Показы за месяц - 2 019 398\n'
@@ -256,7 +256,7 @@ LEXICON_PRICE: dict[str, str] = {
                      '💵Сутки - 185 руб.\n'
                      '💵Месяц - 2998 руб. (Минск).\n'
                      '💵Месяц - 4998 руб. (Вся РБ).\n',
-    'banner_top': 'AgACAgIAAxkBAAIpn2ZaIDgDsMr4K3ZKVS0Ck1ePhMCZAAKc4TEbxpHQShsEn_ScTXZ0AQADAgADcwADNQQ',
+    'banner_top': 'AgACAgIAAxkBAAIqqGZiKYpipFIu2LfLiOXs4gTqaqatAAJK2TEbLD0YSxZRKBICbS2dAQADAgADcwADNQQ',
     'banner_top_info': '<b>Баннерная растяжка.</b> Дублируется в мобильной версии сайта.\n'
                        '✅CTR-0.10%|CPM-1.37 руб.\n'
                        '✅Показы за месяц - 3 533 947\n'
@@ -264,7 +264,7 @@ LEXICON_PRICE: dict[str, str] = {
                        '💵Сутки - 128 руб.\n'
                        '💵Месяц - 2498 руб. (Минск).\n'
                        '💵Месяц - 3998 руб.(Вся РБ).\n',
-    'brendbox': 'AgACAgIAAxkBAAIpp2ZaIfac4nGzDFie__i0RwPoykbaAAK24TEbxpHQShQNTKttcQNhAQADAgADcwADNQQ',
+    'brendbox': 'AgACAgIAAxkBAAIqq2ZiKeeG1THECsLrPQP32a_vOl4UAAJL2TEbLD0YS3TGJVJ5qYjMAQADAgADcwADNQQ',
     'brendbox_info': '<b>БРЕНДБОКС в "ХИТАХ"</b>.\n'
                      'С закреплением на главной странице в рубрике "ХИТЫ".\n'
                      'Высокая посещаемость рубрики. '
@@ -274,8 +274,8 @@ LEXICON_PRICE: dict[str, str] = {
                      '✅Клики - 1 154\n'
                      '💵Месяц(1-6 место) - 1 698 руб.\n'
                      '💵Месяц(7-9 место) - 1 498 руб.\n',
-    'brendbox_heading': 'AgACAgIAAxkBAAIpuGZaJnbfPdXAIZ7pTY1hnw3tuqjTAAJ54jEbxpHQStMlEU49KN-0AQADAgADcwADNQQ',
-    'brendbox_heading_new': 'AgACAgIAAxkBAAIpwGZaKy9Fs4L7HIbzA7xLw_XS2R1rAAIj4jEbxpHQSrOiNu0v618SAQADAgADcwADNQQ',
+    'brendbox_heading': 'AgACAgIAAxkBAAIqsWZiKm6Rq0M1z5HP4S9yCWRZcdeDAAJP2TEbLD0YS-82OaEZ7vLgAQADAgADcwADNQQ',
+    'brendbox_heading_new': 'AgACAgIAAxkBAAIqrmZiKhRmUg07OoJl0eydFucXYDNjAAJM2TEbLD0YS49Dgbz__wtOAQADAgADcwADNQQ',
     'brendbox_heading_info': '<b>БРЕНДБОКС в рубрике.</b>\n'
                              'Размещается в тематической рубрике.\n'
                              'Дублируется в мобилной версии сайта.\n'
@@ -285,7 +285,7 @@ LEXICON_PRICE: dict[str, str] = {
                               '💵Месяц(1-2 строка) - 697.8 руб.\n'
                               '💵Месяц(4 строка) - 598.8 руб.\n'
                               '💵Месяц(6 строка) - 398.7 руб.\n',
-    'floating': 'AgACAgIAAxkBAAIpyGZaLDzjaY8fv-inuBywlX-oqqaAAAKX4jEbxpHQSjPjaiU8g-BfAQADAgADcwADNQQ',
+    'floating': 'AgACAgIAAxkBAAIqtGZiKq8AAWCV456Bi1pVWLu65ALC8gACUNkxGyw9GEs7-2AvBUiEcAEAAwIAA3MAAzUE',
     'floating_info': '<b>ФЛОАТИНГ</b>.\n'
                      'Размещается только в мобильной версии.\n'
                      'В рубрике размещается в нижней части экрана, а в акции - в верхней, чтобы не закрывать кнопки.\n'
@@ -294,13 +294,13 @@ LEXICON_PRICE: dict[str, str] = {
                       '✅Клики - 27 582 \n'
                       '💵Месяц(скозная) - 1998 руб.\n'
                       '💵Месяц(в рубрике) - 998 руб.\n',
-    'banner_horizontal': 'AgACAgIAAxkBAAIpy2ZaLPgUCUR6rfl15YZUZDPxx6NAAAKb4jEbxpHQShMyEUhJo5hQAQADAgADcwADNQQ',
+    'banner_horizontal': 'AgACAgIAAxkBAAIqt2ZiKurfVEsinJA4pwUK92XKzSK-AAJR2TEbLD0YS25TzLCc2e6LAQADAgADcwADNQQ',
     'banner_horizontal_info': '<b>Баннер горизонтальный в рурике "ХИТЫ"</b>.\n'
                               'Дублируется в мобильной версии.\n'
                               'Размещается и на главной странице.\n'
                                '✅CTR-0.06%|CPM-1.72 руб.\n'
                                '💵Месяц - 598 руб.\n',
-    'advertising_news': 'AgACAgIAAxkBAAIp02ZaL3rJYd1kMi5Up_rGASYDAhT9AALL4jEbxpHQSiSyrqpl1G1eAQADAgADcwADNQQ',
+    'advertising_news': 'AgACAgIAAxkBAAIqumZiKximt4FxqE8gNhvquMekhMGlAAJS2TEbLD0YS07vyq11h5ThAQADAgADcwADNQQ',
     'advertising_news_info': '<b>Рекламная новость. Новость дня</b>.\n'
                              'Отображается только на главной странице.\n'
                              'Дублируется в мобильной версии.\n'
@@ -310,7 +310,7 @@ LEXICON_PRICE: dict[str, str] = {
                              '💵2 выхода - 258 руб.\n'
                              '💵4 выхода - 376 руб.\n'
                              '💵6 выхода - 494 руб.\n',
-    'brendbox_premium': 'AgACAgIAAxkBAAIp1mZaL9_vcuKfolDKcOFEUlyxpdp9AALO4jEbxpHQSg7ZZY2LZ3wZAQADAgADcwADNQQ',
+    'brendbox_premium': 'AgACAgIAAxkBAAIqvWZiK0kv5OdAgBu9W8KPpgvhd5CDAAJU2TEbLD0YSx2u5lMsGBDoAQADAgADcwADNQQ',
     'brendbox_premium_info': '<b>Премиум брендбукс/Сайдбар.</b>\n'
                              'Размещается только в десктопной версии.\n'
                              'Есть возможность размещения видео-баннера.\n'
