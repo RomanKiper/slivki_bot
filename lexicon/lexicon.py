@@ -236,7 +236,7 @@ LEXICON_btn_reviews: dict[str, str] = {
 }
 
 LEXICON_PRICE: dict[str, str] = {
-    'photo_telejka': 'AgACAgIAAxkBAAIrbWZfhToFlihW-GQu1LpoJNS6eL2uAAJy4TEb49v5SvmGOBkuOMOwAQADAgADcwADNQQ',
+    'photo_telejka': 'AgACAgIAAxkBAAIqUmZiGnmOViRLmCcrRj-SuY9-j5cGAAI63DEbZGYRS466NWoZIJXqAQADAgADcwADNQQ',
     'telejka_info': '<b>Пост в телеграм канале Скидки Беларуси.</b>\n'
                     '✅Количество подписчиков - 46 000.\n'
                     '✅Количество просмотров - более 10 000.\n\n'
@@ -372,10 +372,10 @@ LEXICON_PRICE: dict[str, str] = {
                    'новых подписчиков в канале клиента от 1000 до 10000 и более.\n'
                     '💵 Стоимость розыгрыша - стомость поста или обзора + 300 - 500 рублей.\n',
 
-    'app1': 'AgACAgIAAxkBAAIqlWZc4qGlYypeAfrN_owmz98YGXDLAAIg5zEboD_oSkutz_5lWel2AQADAgADcwADNQQ',
-    'app2': 'AgACAgIAAxkBAAIqmGZc45xQc4Qb7-uNz7rR2O_G32RAAAIu5zEboD_oSqmGRtFvMOOHAQADAgADcwADNQQ',
-    'app3': 'AgACAgIAAxkBAAIqm2Zc48ZZ5bYZxupPmxuvZ1RBeqjuAAIy5zEboD_oStU0D5LRXWeVAQADAgADcwADNQQ',
-    'app4': 'AgACAgIAAxkBAAIqnmZc4_H1qKGL6eSEWVLo2hbQQe3DAAI15zEboD_oSjNpunglLOYtAQADAgADcwADNQQ',
+    'app1': 'AgACAgIAAxkBAAIqX2ZiG6yEOXpRmrLpx64xYWl28AXyAAJA3DEbZGYRS0ci6w0tUI7bAQADAgADcwADNQQ',
+    'app2': 'AgACAgIAAxkBAAIqYmZiG7rc6N04ioZFhw-uPIrd8Lf_AAJB3DEbZGYRS59nU-Ik58J6AQADAgADcwADNQQ',
+    'app3': 'AgACAgIAAxkBAAIqZWZiG8ZtnUqhQzcgLAdnDzHQagH1AAJC3DEbZGYRS26iAiZcaisPAQADAgADcwADNQQ',
+    'app4': 'AgACAgIAAxkBAAIqaGZiG9ISdb6Df_eGppqByKIff1tVAAJD3DEbZGYRSzokJZYfqZxeAQADAgADcwADNQQ',
     'app_info1': '<b>Преимущества приложения SLIVKI:</b>\n'
                  '✅Быстрая регистрация по номеру телефона.\n'
                  '✅Поддержка работы даже на старых версиях ОС.\n'
