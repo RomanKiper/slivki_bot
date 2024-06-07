@@ -6,7 +6,6 @@ __pycache__/
 # C extensions
 *.so
 .env
-my_base.db
 
 # Distribution / packaging
 .Python
@@ -166,4 +165,5 @@ python-poetry.org
 Basic usage | Documentation | Poetry - Python dependency management and packaging made easy
 
 Basic usage For the basic usage introduction we will be installing pendulum, a datetime library. If you have not yet installed Poetry, refer to the Introduction chapter.
-...
+...my_base.db
+my_base.db
