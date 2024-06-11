@@ -388,3 +388,63 @@ async def on_prev_photo(callback: types.CallbackQuery, bot: Bot):
                                      caption=caption_dict[photo_ids[current_photo_index]],
                                  ),
                                  reply_markup=markup_prev_next_app)
+
+
+###########################  regions  #####################
+
+region_page1 = LEXICON_PRICE['region_page1']
+region_page2 = LEXICON_PRICE['region_page2']
+region_page3 = LEXICON_PRICE['region_page3']
+
+text_regions = [region_page1, region_page2, region_page3]
+
+current_text_regions = 0
+
+button_next = InlineKeyboardButton(
+    text='Далее',
+    callback_data='next_page_region')
+button_prev = InlineKeyboardButton(
+    text='Назад',
+    callback_data='prev_page_region')
+# button_manager = InlineKeyboardButton(
+#     text=LEXICON_btn_main_menu['manager'],
+#     callback_data='manager')
+button_back_to_preview_menu = InlineKeyboardButton(
+    text='Назад в меню',
+    callback_data='price_statistic')
+keyboard_prev_next: list[list[InlineKeyboardButton]] = [
+    [button_prev, button_next],
+    [button_back_to_preview_menu]
+]
+markup_prev_next_regions = InlineKeyboardMarkup(inline_keyboard=keyboard_prev_next)
+
+
+@user_advert_router.callback_query(F.data == 'regions_sl')
+async def on_start(message: Message, bot: Bot):
+    await bot.send_message(chat_id=message.from_user.id,
+                           text=text_regions[current_text_regions],
+                           reply_markup=markup_prev_next_regions)
+
+
+# Обработчик инлайн кнопки "Следующеая страница"
+@user_advert_router.callback_query(lambda callback_query: callback_query.data == 'next_page_region')
+async def on_next_photo(callback: types.CallbackQuery, bot: Bot):
+    global current_text_regions
+    current_text_regions = (current_text_regions + 1) % len(text_regions)
+    await bot.edit_message_text(chat_id=callback.message.chat.id,
+                                message_id=callback.message.message_id,
+                                text=text_regions[current_text_regions],
+                                reply_markup=markup_prev_next_regions,
+                                disable_web_page_preview=True)
+
+
+# Обработчик инлайн кнопки "Предыдущий техт"
+@user_advert_router.callback_query(lambda callback_query: callback_query.data == 'prev_page_region')
+async def on_prev_photo(callback: types.CallbackQuery, bot: Bot):
+    global current_text_regions
+    current_text_regions = (current_text_regions - 1) % len(text_regions)
+    await bot.edit_message_text(chat_id=callback.message.chat.id,
+                                message_id=callback.message.message_id,
+                                text=text_regions[current_text_regions],
+                                reply_markup=markup_prev_next_regions,
+                                disable_web_page_preview=True)
