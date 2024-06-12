@@ -220,7 +220,7 @@ markup_prev_next_tik_tik = InlineKeyboardMarkup(inline_keyboard=keyboard_prev_ne
 @user_advert_router.callback_query(F.data == 'tiktok_sl')
 async def on_start(message: Message, bot: Bot):
     await bot.send_message(chat_id=message.from_user.id,
-                           text=text_tiktok[current_text_index],
+                           text=text_tiktok[current_text_tiktok],
                            reply_markup=markup_prev_next_tik_tik)
 
 
