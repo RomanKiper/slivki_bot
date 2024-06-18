@@ -28,8 +28,9 @@ def pages(paginator: Paginator):
     return btns
 
 
-async def products(session, level, category, page):
-    products = await orm_get_products(session, category_id=category)
+async def products(session, level, category, page, user_id):
+
+    products = await orm_get_products(session, category_id=category, user_id=user_id)
 
     paginator = Paginator(products, page=page)
     product = paginator.get_page()[0]
@@ -121,6 +122,6 @@ async def get_menu_content(
     if level == 0:
         return await offer_menu(session, level, menu_name)
     elif level == 1:
-        return await products(session, level, category, page)
+        return await products(session, level, category, page, user_id)
     elif level == 2:
         return await carts(session, level, menu_name, page, user_id, product_id)

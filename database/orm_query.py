@@ -2,23 +2,43 @@ from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
-from database.models import Product, Category, Banner, Cart, User, Offer, Faq, Price, Document, Notes
+from database.models import Product, Category, Banner, Cart, User, Offer, Faq, Price, Document, Notes, HandlerCounter
 
 
-async def orm_add_product(session: AsyncSession(), data: dict):
+########################### счетчик  #########################
+
+async def increment_handler_counter(session: AsyncSession, user_id: int, handler_name: str):
+    usage = await session.execute(
+        select(HandlerCounter).filter_by(user_id=user_id, handler_name=handler_name)
+    )
+    usage = usage.scalars().first()
+
+    if usage:
+        usage.count += 1
+    else:
+        usage = HandlerCounter(user_id=user_id, handler_name=handler_name, count=1)
+        session.add(usage)
+
+    await session.commit()
+
+
+########################### работа с продуктом #########################
+
+async def orm_add_product(session: AsyncSession(), data: dict, user_id: int):
     obj = Product(
         name=data['name'],
         description=data['description'],
         price=float(data['price']),
         image=data['image'],
         category_id=int(data["category"]),
+        user_id=user_id,
     )
     session.add(obj)
     await session.commit()
 
 
-async def orm_get_products(session: AsyncSession, category_id):
-    query = select(Product).where(Product.category_id == int(category_id))
+async def orm_get_products(session: AsyncSession, category_id, user_id):
+    query = select(Product).where(Product.category_id == int(category_id)).where(Product.user_id == int(user_id))
     result = await session.execute(query)
     return result.scalars().all()
 
@@ -35,13 +55,14 @@ async def orm_get_product(session: AsyncSession, product_id: int):
     return result.scalar()
 
 
-async def orm_update_product(session: AsyncSession, product_id: int, data):
+async def orm_update_product(session: AsyncSession, product_id: int, data, user_id: int):
     query = update(Product).where(Product.id == product_id).values(
         name=data['name'],
         description=data['description'],
         price=float(data['price']),
         image=data['image'],
         category_id=int(data["category"]),
+        user_id=user_id,
     )
 
     await session.execute(query)
@@ -182,8 +203,8 @@ async def orm_add_offer(session: AsyncSession(), data: dict):
     await session.commit()
 
 
-async def orm_get_offers(session: AsyncSession):
-    query = select(Offer)
+async def orm_get_offers(session: AsyncSession, user_id: int):
+    query = select(Offer).where(Offer.user_id == user_id)
     result = await session.execute(query)
     return result.scalars().all()
 

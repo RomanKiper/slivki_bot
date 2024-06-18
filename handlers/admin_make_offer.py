@@ -45,7 +45,8 @@ class AddOffer(StatesGroup):
 
 @admin_offer_router.callback_query(F.data == 'offers_list')
 async def admin_get_offers_list(callback: types.CallbackQuery, session: AsyncSession):
-    offers = await orm_get_offers(session)
+    user_id = callback.from_user.id
+    offers = await orm_get_offers(session, user_id)
     btns = {offer.name: f'offer_{offer.id}' for offer in offers}
     print(btns)
     await callback.message.answer("Архив КП", reply_markup=get_callback_btns(btns=btns, sizes=(1,)))

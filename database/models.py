@@ -35,8 +35,11 @@ class Product(Base):
     price: Mapped[float] = mapped_column(Numeric(5,2), nullable=False)
     image: Mapped[str] = mapped_column(String(150))
     category_id: Mapped[int] = mapped_column(ForeignKey('category.id', ondelete='CASCADE'), nullable=False)
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
 
     category: Mapped['Category'] = relationship(backref='product')
+    user: Mapped['User'] = relationship(backref='product')
+
 
 
 class Faq(Base):
@@ -86,6 +89,18 @@ class Price(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(150), nullable=False)
     price: Mapped[str] = mapped_column(String(150))
+
+
+class HandlerCounter(Base):
+    __tablename__ = 'handler_counter'
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
+    handler_name: Mapped[str] = mapped_column(String(150), nullable=False)
+    count: Mapped[int] = mapped_column(default=0)
+
+    user: Mapped['User'] = relationship(backref='handler_counter')
+
 
 
 class User(Base):

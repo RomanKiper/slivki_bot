@@ -115,14 +115,16 @@ async def admin_handler(message_or_callback: types.Union[types.Message, Callback
 @admin_router.callback_query(F.data == 'products_list')
 async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
     categories = await orm_get_categories(session)
-    btns = {category.name : f'category_{category.id}' for category in categories}
+    btns = {category.name: f'category_{category.id}' for category in categories}
     await callback.message.answer("Выберите категорию", reply_markup=get_callback_btns(btns=btns))
 
 
 @admin_router.callback_query(F.data.startswith('category_'))
 async def starring_at_product(callback: types.CallbackQuery, session: AsyncSession):
     category_id = callback.data.split('_')[-1]
-    for product in await orm_get_products(session, int(category_id)):
+    user_id = callback.from_user.id
+    print(user_id)
+    for product in await orm_get_products(session, int(category_id), int(user_id)):
         await callback.message.answer_photo(
             product.image,
             caption=f"<strong>{product.name}\
@@ -286,11 +288,12 @@ async def add_image(message: types.Message, state: FSMContext, session: AsyncSes
         await message.answer("Отправьте фото предложения!")
         return
     data = await state.get_data()
+    user_id = message.from_user.id
     try:
         if AddProduct.product_for_change:
-            await orm_update_product(session, AddProduct.product_for_change.id, data)
+            await orm_update_product(session, AddProduct.product_for_change.id, data, user_id)
         else:
-            await orm_add_product(session, data)
+            await orm_add_product(session, data, user_id)
         await message.answer("Товар добавлен/изменен", reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
         await state.clear()
 
