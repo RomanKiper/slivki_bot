@@ -7,7 +7,8 @@ from database.models import Product, Category, Banner, Cart, User, Offer, Faq, P
 
 ########################### счетчик  #########################
 
-async def increment_handler_counter(session: AsyncSession, user_id: int, handler_name: str):
+async def orm_increment_handler_counter(session: AsyncSession, user_id: int, handler_name: str,
+                                        username: str, last_name: str, first_name: str):
     usage = await session.execute(
         select(HandlerCounter).filter_by(user_id=user_id, handler_name=handler_name)
     )
@@ -16,7 +17,8 @@ async def increment_handler_counter(session: AsyncSession, user_id: int, handler
     if usage:
         usage.count += 1
     else:
-        usage = HandlerCounter(user_id=user_id, handler_name=handler_name, count=1)
+        usage = HandlerCounter(user_id=user_id, handler_name=handler_name, count=1, username=username,
+                               last_name=last_name, first_name=first_name)
         session.add(usage)
 
     await session.commit()
@@ -129,13 +131,14 @@ async def orm_add_user(
     user_id: int,
     first_name: str | None = None,
     last_name: str | None = None,
+    username: str | None = None,
     phone: str | None = None,
 ):
     query = select(User).where(User.user_id == user_id)
     result = await session.execute(query)
     if result.first() is None:
         session.add(
-            User(user_id=user_id, first_name=first_name, last_name=last_name, phone=phone)
+            User(user_id=user_id, first_name=first_name, last_name=last_name, phone=phone, username=username)
         )
         await session.commit()
 

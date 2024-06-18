@@ -4,7 +4,7 @@ from aiogram.types import CallbackQuery, InlineKeyboardButton, Message
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from database.models import Banner
-from database.orm_query import orm_get_faqs, orm_get_faq
+from database.orm_query import orm_get_faqs, orm_get_faq, orm_add_user, orm_increment_handler_counter
 from filters.chat_types import ChatTypeFilter
 from keyboards.inline.inline_add_product import get_callback_btns, get_inlineMix_btns, \
     get_callback_btns_extra_btn
@@ -24,6 +24,19 @@ user_private_router.message.filter(ChatTypeFilter(['private']))
 async def start_cmd(message_or_callback: types.Union[types.Message, CallbackQuery], session: AsyncSession):
     if isinstance(message_or_callback, types.Message):
         message = message_or_callback
+        await orm_add_user(session,
+                           user_id=message.from_user.id,
+                           username=message.from_user.username,
+                           first_name=message.from_user.first_name,
+                           last_name=message.from_user.last_name,
+                           )
+        await orm_increment_handler_counter(session,
+                                            user_id=message.from_user.id,
+                                            handler_name='start',
+                                            username=message.from_user.username,
+                                            first_name=message.from_user.first_name,
+                                            last_name=message.from_user.last_name,
+                                            )
         query = select(Banner).where(Banner.name == 'main')
         result = await session.execute(query)
         banner = result.scalar()
@@ -34,6 +47,12 @@ async def start_cmd(message_or_callback: types.Union[types.Message, CallbackQuer
     elif isinstance(message_or_callback, CallbackQuery):
         # Если это колбэк-запрос
         callback = message_or_callback
+        await orm_add_user(session,
+                           user_id=callback.message.from_user.id,
+                           username=callback.message.from_user.username,
+                           first_name=callback.message.from_user.first_name,
+                           last_name=callback.message.from_user.last_name,
+                           )
         query = select(Banner).where(Banner.name == 'main')
         result = await session.execute(query)
         banner = result.scalar()
