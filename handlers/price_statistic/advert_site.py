@@ -286,6 +286,7 @@ markup_prev_next_promotion = InlineKeyboardMarkup(inline_keyboard=keyboard_prev_
 
 @user_advert_router.callback_query(F.data == 'site_slivki_promotion')
 async def on_start(message: Message, bot: Bot):
+    disable_web_page_preview = True
     await bot.send_message(chat_id=message.from_user.id,
                            text=text_pages[current_text_index],
                            reply_markup=markup_prev_next_promotion)
@@ -296,6 +297,7 @@ async def on_start(message: Message, bot: Bot):
 async def on_next_photo(callback: types.CallbackQuery, bot: Bot):
     global current_text_index
     current_text_index = (current_text_index + 1) % len(text_pages)
+    disable_web_page_preview = True
     await bot.edit_message_text(chat_id=callback.message.chat.id,
                                 message_id=callback.message.message_id,
                                 text=text_pages[current_text_index],
@@ -308,6 +310,7 @@ async def on_next_photo(callback: types.CallbackQuery, bot: Bot):
 async def on_prev_photo(callback: types.CallbackQuery, bot: Bot):
     global current_text_index
     current_text_index = (current_text_index - 1) % len(text_pages)
+    disable_web_page_preview = True
     await bot.edit_message_text(chat_id=callback.message.chat.id,
                                 message_id=callback.message.message_id,
                                 text=text_pages[current_text_index],
@@ -395,8 +398,9 @@ async def on_prev_photo(callback: types.CallbackQuery, bot: Bot):
 region_page1 = LEXICON_PRICE['region_page1']
 region_page2 = LEXICON_PRICE['region_page2']
 region_page3 = LEXICON_PRICE['region_page3']
+region_page4 = LEXICON_PRICE['region_page4']
 
-text_regions = [region_page1, region_page2, region_page3]
+text_regions = [region_page1, region_page2, region_page3, region_page4]
 
 current_text_regions = 0
 

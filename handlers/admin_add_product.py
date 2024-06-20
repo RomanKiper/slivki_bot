@@ -9,7 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from filters.chat_types import ChatTypeFilter
 from filters.is_admin import IsAdminMsg
 from database.orm_query import orm_add_product, orm_get_products, orm_delete_product, \
-    orm_update_product, orm_get_product, orm_get_categories, orm_change_banner_image, orm_get_info_pages
+    orm_update_product, orm_get_product, orm_get_categories, orm_change_banner_image, orm_get_info_pages, \
+    orm_increment_handler_counter
 from keyboards.inline.inline_add_product import get_callback_btns, get_inlineMix_btns
 from lexicon.lexicon import LEXICON_btn_main_admin_menu, LEXICON_RU, LEXICON_btn_back_menu_links
 
@@ -101,10 +102,17 @@ class Add_document(StatesGroup):
 
 @admin_router.message(Command("admin"), F.text| F.command)
 @admin_router.callback_query(lambda c: c.data.startswith("admin"))
-async def admin_handler(message_or_callback: types.Union[types.Message, CallbackQuery]):
+async def admin_handler(message_or_callback: types.Union[types.Message, CallbackQuery], session: AsyncSession):
     if isinstance(message_or_callback, types.Message):
         # Если это сообщение
         message = message_or_callback
+        await orm_increment_handler_counter(session,
+                                            user_id=message.from_user.id,
+                                            handler_name='admin',
+                                            username=message.from_user.username,
+                                            first_name=message.from_user.first_name,
+                                            last_name=message.from_user.last_name,
+                                            )
         await message.answer(text=LEXICON_RU["/admin+panel"], reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
     elif isinstance(message_or_callback, CallbackQuery):
         # Если это колбэк-запрос

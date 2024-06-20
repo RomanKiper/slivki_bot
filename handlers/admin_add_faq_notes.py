@@ -241,7 +241,7 @@ async def add_name(message: types.Message, state: FSMContext):
 
     await state.update_data(name=message.text)
 
-    await message.answer("Введите описание товара")
+    await message.answer("Введите описание вопроса")
     await state.set_state(Add_FAQ.description)
 
 # Хендлер для отлова некорректных вводов для состояния name
