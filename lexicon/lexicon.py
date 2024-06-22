@@ -116,6 +116,12 @@ LEXICON_btn_main_menu: dict[str, str] = {
         "ГОТОВЫЕ КП": "offers_main",
     }
 
+LEXICON_btn_help: dict[str, str] = {
+        "Инструкция для админки📄": "adm_panel_instruction",
+        "Связь с администратором📞": "admin_connect",
+        "Общая информация🪬": "main_information",
+    }
+
 
 LEXICON_btn_main_links: dict[str, str] = {
         "САЙТ SLIVKI.BY": "site_slivki_link",

@@ -1,15 +1,12 @@
 import json
-
 from aiogram import Router, F, types
 from aiogram.types import UNSET_PARSE_MODE
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 from sqlalchemy import select, delete
-
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
-
 from database.models import Offer, Cart
 from filters.chat_types import ChatTypeFilter
 from filters.is_admin import IsAdminMsg
@@ -18,6 +15,7 @@ from database.orm_query import orm_add_user, orm_add_to_cart, orm_get_user_carts
 from handlers.menu_processing import get_menu_content
 from keyboards.inline.inline_add_product import get_callback_btns
 from keyboards.inline.inline_offer import MenuCallBack
+
 
 admin_offer_router = Router()
 admin_offer_router.message.filter(ChatTypeFilter(['private']), IsAdminMsg())

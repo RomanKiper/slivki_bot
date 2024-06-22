@@ -10,7 +10,7 @@ from keyboards.inline.inline_add_product import get_callback_btns, get_inlineMix
     get_callback_btns_extra_btn
 from lexicon.lexicon import LEXICON_btn_main_menu, LEXICON_btn_price_statistic, \
     LEXICON_btn_main_links, LEXICON_btn_slivki_site_link, LEXICON_btn_back_menu_links, LEXICON_btn_app_link, \
-    LEXICON_btn_back_to_main_menu, LEXICON_btn_back_to_advertising_menu
+    LEXICON_btn_back_to_main_menu, LEXICON_btn_back_to_advertising_menu, LEXICON_btn_help
 from lexicon.lexicon import LEXICON_HI, LEXICON_RU
 
 user_private_router = Router()
@@ -79,7 +79,7 @@ async def get_info_about(callback: types.CallbackQuery):
 @user_private_router.message(F.text.lower().in_({'помощь', "help"}))
 @user_private_router.message(Command('help'))
 async def help_cmd(message: types.Message):
-    await message.answer("Bot's help.")
+    await message.answer(text="Сделайте выбор:", reply_markup=get_callback_btns(btns=LEXICON_btn_help, sizes=(1,)))
 
 
 @user_private_router.message(F.text.lower().in_(LEXICON_HI))
