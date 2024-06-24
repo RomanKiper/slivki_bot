@@ -12,6 +12,7 @@ from lexicon.lexicon import LEXICON_btn_main_menu, LEXICON_btn_price_statistic, 
     LEXICON_btn_main_links, LEXICON_btn_slivki_site_link, LEXICON_btn_back_menu_links, LEXICON_btn_app_link, \
     LEXICON_btn_back_to_main_menu, LEXICON_btn_back_to_advertising_menu, LEXICON_btn_help
 from lexicon.lexicon import LEXICON_HI, LEXICON_RU
+from lexicon.lexicon_presentation import LEXICON_PRESENTATION, LEXICON_btn_presentation1
 
 user_private_router = Router()
 user_private_router.message.filter(ChatTypeFilter(['private']))
@@ -198,6 +199,14 @@ async def inline_get_office_information(callback: types.CallbackQuery, bot: Bot)
                             longitude=27.569655)
     await callback.message.answer(text=LEXICON_RU['/office_adress'],
                                   reply_markup=get_callback_btns(btns=LEXICON_btn_back_to_main_menu, sizes=(2,)))
+    await callback.message.delete()
+
+#################################################################
+
+@user_private_router.callback_query(F.data == 'presentation_main')
+async def get_presentation_page1(callback: types.CallbackQuery):
+    await callback.message.answer(text=LEXICON_PRESENTATION['/present1'],
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_presentation1, sizes=(1,)) )
     await callback.message.delete()
 
 
