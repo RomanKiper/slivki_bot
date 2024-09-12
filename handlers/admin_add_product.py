@@ -44,9 +44,7 @@ class AddOffer(StatesGroup):
     making_offer = State()
     discount = State()
 
-
     offer_for_change = None
-
 
     texts = {
         'AddOffer:name': 'Введите название заново:',
@@ -100,7 +98,7 @@ class Add_document(StatesGroup):
     }
 
 
-@admin_router.message(Command("admin"), F.text| F.command)
+@admin_router.message(Command("admin"), F.text | F.command)
 @admin_router.callback_query(lambda c: c.data.startswith("admin"))
 async def admin_handler(message_or_callback: types.Union[types.Message, CallbackQuery], session: AsyncSession):
     if isinstance(message_or_callback, types.Message):
@@ -113,11 +111,15 @@ async def admin_handler(message_or_callback: types.Union[types.Message, Callback
                                             first_name=message.from_user.first_name,
                                             last_name=message.from_user.last_name,
                                             )
-        await message.answer(text=LEXICON_RU["/admin+panel"], reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
+
+        await message.answer(text=LEXICON_RU["/admin+panel"],
+                             reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
     elif isinstance(message_or_callback, CallbackQuery):
         # Если это колбэк-запрос
         callback_query = message_or_callback
-        await callback_query.message.answer(text=LEXICON_RU["/admin+panel"], reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
+        await callback_query.message.answer(text=LEXICON_RU["/admin+panel"],
+                                            reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu,
+                                                                           sizes=(2,)))
 
 
 @admin_router.callback_query(F.data == 'products_list')
@@ -157,6 +159,7 @@ async def delete_product_callback(callback: types.CallbackQuery, session: AsyncS
     await callback.answer("Товар удален")
     await callback.message.answer("Товар удален!")
 
+
 # FSM:
 
 @admin_router.callback_query(StateFilter(None), F.data.startswith("change_"))
@@ -191,7 +194,8 @@ async def cancel_handler(message: types.Message, state: FSMContext) -> None:
     if AddProduct.product_for_change:
         AddProduct.product_for_change = None
     await state.clear()
-    await message.answer("Действия отменены", reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
+    await message.answer("Действия отменены",
+                         reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
 
 
 # Ловим данные для состояние name и потом меняем состояние на description
@@ -213,6 +217,7 @@ async def add_name(message: types.Message, state: FSMContext):
     await message.answer("Введите описание товара")
     await state.set_state(AddProduct.description)
 
+
 # Хендлер для отлова некорректных вводов для состояния name
 @admin_router.message(AddProduct.name)
 async def add_name2(message: types.Message, state: FSMContext):
@@ -233,7 +238,7 @@ async def add_description(message: types.Message, state: FSMContext, session: As
         await state.update_data(description=message.text)
 
     categories = await orm_get_categories(session)
-    btns = {category.name : str(category.id) for category in categories}
+    btns = {category.name: str(category.id) for category in categories}
     await message.answer("Выберите категорию", reply_markup=get_callback_btns(btns=btns))
     await state.set_state(AddProduct.category)
 
@@ -256,7 +261,8 @@ async def category_choice(callback: types.CallbackQuery, state: FSMContext, sess
         await callback.message.answer('Выберите катеорию из кнопок.')
         await callback.answer()
 
-#Ловим любые некорректные действия, кроме нажатия на кнопку выбора категории
+
+# Ловим любые некорректные действия, кроме нажатия на кнопку выбора категории
 @admin_router.message(AddProduct.category)
 async def category_choice2(message: types.Message, state: FSMContext):
     await message.answer("'Выберите катеорию из кнопок.'")
@@ -277,6 +283,7 @@ async def add_price(message: types.Message, state: FSMContext):
         await state.update_data(price=message.text)
     await message.answer("Загрузите изображение товара")
     await state.set_state(AddProduct.image)
+
 
 # Хендлер для отлова некорректных ввода для состояния price
 @admin_router.message(AddProduct.price)
@@ -302,7 +309,8 @@ async def add_image(message: types.Message, state: FSMContext, session: AsyncSes
             await orm_update_product(session, AddProduct.product_for_change.id, data, user_id)
         else:
             await orm_add_product(session, data, user_id)
-        await message.answer("Товар добавлен/изменен", reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
+        await message.answer("Товар добавлен/изменен",
+                             reply_markup=get_callback_btns(btns=LEXICON_btn_main_admin_menu, sizes=(2,)))
         await state.clear()
 
     except Exception as e:
@@ -313,6 +321,7 @@ async def add_image(message: types.Message, state: FSMContext, session: AsyncSes
         await state.clear()
 
     AddProduct.product_for_change = None
+
 
 # Ловим все прочее некорректное поведение для этого состояния
 @admin_router.message(AddProduct.image)
@@ -325,6 +334,7 @@ async def add_image2(message: types.Message, state: FSMContext):
 class AddBanner(StatesGroup):
     image = State()
 
+
 # Отправляем перечень информационных страниц бота и становимся в состояние отправки photo
 @admin_router.callback_query(StateFilter(None), F.data == 'add_change_banner')
 async def add_image2(callback: types.CallbackQuery, state: FSMContext, session: AsyncSession):
@@ -332,6 +342,7 @@ async def add_image2(callback: types.CallbackQuery, state: FSMContext, session: 
     await callback.message.answer(f"Отправьте фото баннера.\nВ описании укажите для какой страницы:\
                          \n{', '.join(pages_names)}")
     await state.set_state(AddBanner.image)
+
 
 # Добавляем/изменяем изображение в таблице (там уже есть записанные страницы по именам:
 # main, catalog, cart(для пустой корзины), about, payment, shipping
@@ -344,14 +355,16 @@ async def add_banner(message: types.Message, state: FSMContext, session: AsyncSe
         await message.answer(f"Введите нормальное название страницы, например:\
                          \n{', '.join(pages_names)}")
         return
-    await orm_change_banner_image(session, for_page, image_id,)
+    await orm_change_banner_image(session, for_page, image_id, )
     await message.answer("Баннер добавлен/изменен.")
     await state.clear()
+
 
 # ловим некоррекный ввод
 @admin_router.message(AddBanner.image)
 async def add_banner2(message: types.Message, state: FSMContext):
     await message.answer("Отправьте фото баннера или отмена")
+
 
 #######################################################################################
 
@@ -420,7 +433,6 @@ async def back_step_handler(message: types.Message, state: FSMContext) -> None:
         )
         return
 
-
     previous = None
     for step in AddProduct.__all_states__:
         if step.state == current_state:
@@ -435,6 +447,5 @@ async def back_step_handler(message: types.Message, state: FSMContext) -> None:
 @admin_router.callback_query(F.data == 'tables_links')
 async def get_tables_links(callback: types.CallbackQuery):
     await callback.message.answer(text=LEXICON_RU['/list_links_work_tables'], disable_web_page_preview=True,
-                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)))
     await callback.message.delete()
-

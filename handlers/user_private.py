@@ -10,9 +10,8 @@ from keyboards.inline.inline_add_product import get_callback_btns, get_inlineMix
     get_callback_btns_extra_btn
 from lexicon.lexicon import LEXICON_btn_main_menu, LEXICON_btn_price_statistic, \
     LEXICON_btn_main_links, LEXICON_btn_slivki_site_link, LEXICON_btn_back_menu_links, LEXICON_btn_app_link, \
-    LEXICON_btn_back_to_main_menu, LEXICON_btn_back_to_advertising_menu, LEXICON_btn_help
+    LEXICON_btn_back_to_main_menu, LEXICON_btn_back_to_advertising_menu
 from lexicon.lexicon import LEXICON_HI, LEXICON_RU
-from lexicon.lexicon_presentation import LEXICON_PRESENTATION, LEXICON_btn_presentation1
 
 user_private_router = Router()
 user_private_router.message.filter(ChatTypeFilter(['private']))
@@ -21,7 +20,6 @@ user_private_router.message.filter(ChatTypeFilter(['private']))
 @user_private_router.message(F.text.lower().in_({'старт', 'начать', "start"}))
 @user_private_router.message(CommandStart())
 @user_private_router.callback_query(lambda c: c.data.startswith("main_menu"))
-
 async def start_cmd(message_or_callback: types.Union[types.Message, CallbackQuery], session: AsyncSession):
     if isinstance(message_or_callback, types.Message):
         message = message_or_callback
@@ -43,7 +41,7 @@ async def start_cmd(message_or_callback: types.Union[types.Message, CallbackQuer
         banner = result.scalar()
         await message.answer_photo(photo=banner.image,
                                    caption=banner.description,
-                                   reply_markup=get_callback_btns(btns=LEXICON_btn_main_menu, sizes=(1,2,)))
+                                   reply_markup=get_callback_btns(btns=LEXICON_btn_main_menu, sizes=(1, 2,)))
         await message.delete()
     elif isinstance(message_or_callback, CallbackQuery):
         # Если это колбэк-запрос
@@ -58,14 +56,13 @@ async def start_cmd(message_or_callback: types.Union[types.Message, CallbackQuer
         result = await session.execute(query)
         banner = result.scalar()
         await callback.message.answer_photo(photo=banner.image,
-                                   caption=banner.description,
-                                   reply_markup=get_callback_btns(btns=LEXICON_btn_main_menu, sizes=(1,2,)))
+                                            caption=banner.description,
+                                            reply_markup=get_callback_btns(btns=LEXICON_btn_main_menu, sizes=(1, 2,)))
         await callback.message.delete()
 
 
 @user_private_router.callback_query(F.data == 'price_statistic')
 async def get_list_advertising_menu(callback: types.CallbackQuery):
-
     await callback.message.answer(text="В данном блоке ты получшиь цены, статистику и примеры размещения рекламы.",
                                   reply_markup=get_callback_btns(btns=LEXICON_btn_price_statistic, sizes=(2,)))
     await callback.message.delete()
@@ -73,14 +70,9 @@ async def get_list_advertising_menu(callback: types.CallbackQuery):
 
 @user_private_router.callback_query(F.data == 'about')
 async def get_info_about(callback: types.CallbackQuery):
-    await callback.message.answer(text=LEXICON_RU['/description_slivki'], reply_markup=get_callback_btns(btns=LEXICON_btn_back_to_main_menu, sizes=(2,)))
+    await callback.message.answer(text=LEXICON_RU['/description_slivki'],
+                                  reply_markup=get_callback_btns(btns=LEXICON_btn_back_to_main_menu, sizes=(2,)))
     await callback.message.delete()
-
-
-@user_private_router.message(F.text.lower().in_({'помощь', "help"}))
-@user_private_router.message(Command('help'))
-async def help_cmd(message: types.Message):
-    await message.answer(text="Сделайте выбор:", reply_markup=get_callback_btns(btns=LEXICON_btn_help, sizes=(1,)))
 
 
 @user_private_router.message(F.text.lower().in_(LEXICON_HI))
@@ -98,8 +90,8 @@ async def admin_features(callback: types.CallbackQuery, session: AsyncSession):
         markup = get_callback_btns_extra_btn(btns=btns, extra_buttons=[back_to_main_menu])
         await callback.message.answer("Часто задаваемые вопросы:", reply_markup=markup)
     else:
-        await callback.message.answer("Список часто задаваемых вопросв пуст🤔.\nДобавьте вопросы через администартивную панель.📝")
-
+        await callback.message.answer(
+            "Список часто задаваемых вопросв пуст🤔.\nДобавьте вопросы через администартивную панель.📝")
 
 
 @user_private_router.callback_query(F.data.startswith('faq2_'))
@@ -118,24 +110,28 @@ async def starring_at_product(callback: types.CallbackQuery, session: AsyncSessi
     )
     await callback.answer()
 
+
 ######################################ссылки ######################################
 
 @user_private_router.callback_query(F.data == 'links_main')
 async def get_main_menu_links(callback: types.CallbackQuery):
-    await callback.message.answer(text="Рабочие ссылки компании.", reply_markup=get_callback_btns(btns=LEXICON_btn_main_links, sizes=(1,2,2,2,2,1)))
+    await callback.message.answer(text="Рабочие ссылки компании.",
+                                  reply_markup=get_callback_btns(btns=LEXICON_btn_main_links, sizes=(1, 2, 2, 2, 2, 1)))
     await callback.message.delete()
 
 
 @user_private_router.callback_query(F.data == 'site_slivki_link')
 async def get_site_slivki_link(callback: types.CallbackQuery):
-    await callback.message.answer(text="Ссылка на сайт Сливки Бай", reply_markup=get_inlineMix_btns(btns=LEXICON_btn_slivki_site_link, sizes=(1,)) )
+    await callback.message.answer(text="Ссылка на сайт Сливки Бай",
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_slivki_site_link, sizes=(1,)))
     disable_web_page_preview = True
     await callback.message.delete()
 
 
 @user_private_router.callback_query(F.data == 'app-link')
 async def get_app_link(callback: types.CallbackQuery):
-    await callback.message.answer(text="Ссылка на скачивание мобильного приложения slivkiby", reply_markup=get_inlineMix_btns(btns=LEXICON_btn_app_link, sizes=(1,)) )
+    await callback.message.answer(text="Ссылка на скачивание мобильного приложения slivkiby",
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_app_link, sizes=(1,)))
     disable_web_page_preview = True
     await callback.message.delete()
 
@@ -143,42 +139,42 @@ async def get_app_link(callback: types.CallbackQuery):
 @user_private_router.callback_query(F.data == 'insta_all_links')
 async def get_all_insta_links(callback: types.CallbackQuery):
     await callback.message.answer(text=LEXICON_RU['/insta_links'], disable_web_page_preview=True,
-                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)))
     await callback.message.delete()
 
 
 @user_private_router.message(Command('insta_links'))
 async def get_all_insta_links(message: types.Message):
     await message.answer(text=LEXICON_RU['/insta_links'], disable_web_page_preview=True,
-                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_to_advertising_menu, sizes=(1,)) )
+                         reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_to_advertising_menu, sizes=(1,)))
     await message.delete()
 
 
 @user_private_router.callback_query(F.data == 'tiktok_all_links')
 async def get_all_tiktok_links(callback: types.CallbackQuery):
     await callback.message.answer(text=LEXICON_RU['/tiktok_links'], disable_web_page_preview=True,
-                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)))
     await callback.message.delete()
 
 
 @user_private_router.message(Command('tiktok_links'))
 async def get_all_tiktok_links(message: types.Message):
     await message.answer(text=LEXICON_RU['/tiktok_links'], disable_web_page_preview=True,
-                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_to_advertising_menu, sizes=(1,)) )
+                         reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_to_advertising_menu, sizes=(1,)))
     await message.delete()
 
 
 @user_private_router.callback_query(F.data == 'telegram_all_links')
 async def get_all_telegram_links(callback: types.CallbackQuery):
     await callback.message.answer(text=LEXICON_RU['/telega_links'], disable_web_page_preview=True,
-                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)))
     await callback.message.delete()
 
 
 @user_private_router.callback_query(F.data == 'agreement_links')
 async def get_agreement_links(callback: types.CallbackQuery):
     await callback.message.answer(text=LEXICON_RU['/agreement_links'], disable_web_page_preview=True,
-                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)) )
+                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_back_menu_links, sizes=(1,)))
     await callback.message.delete()
 
 
@@ -202,12 +198,6 @@ async def inline_get_office_information(callback: types.CallbackQuery, bot: Bot)
     await callback.message.delete()
 
 #################################################################
-
-@user_private_router.callback_query(F.data == 'presentation_main')
-async def get_presentation_page1(callback: types.CallbackQuery):
-    await callback.message.answer(text=LEXICON_PRESENTATION['/present1'],
-                                  reply_markup=get_inlineMix_btns(btns=LEXICON_btn_presentation1, sizes=(1,)) )
-    await callback.message.delete()
 
 
 # @user_private_router.message()

@@ -41,4 +41,3 @@ class Paginator:
             self.page -= 1
             return self.__get_slice()
         raise IndexError(f'Previous page does not exist. Use has_previous() to check before.')
-

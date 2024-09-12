@@ -119,17 +119,19 @@ insta1 = LEXICON_PRICE['insta1']
 insta2 = LEXICON_PRICE['insta2']
 insta3 = LEXICON_PRICE['insta3']
 insta4 = LEXICON_PRICE['insta4']
+insta4_1 = LEXICON_PRICE['insta4_1']
 insta5 = LEXICON_PRICE['insta5']
 
 
 # Список ID фотографий
-photo_insta_id = [insta1, insta2, insta3, insta4, insta5]
+photo_insta_id = [insta1, insta2, insta3, insta4, insta4_1, insta5]
 
 caption_insta_dict = {
     insta1: LEXICON_PRICE['insta_info1'],
     insta2: LEXICON_PRICE['insta_info2'],
     insta3: LEXICON_PRICE['insta_info3'],
     insta4: LEXICON_PRICE['insta_info4'],
+    insta4_1: LEXICON_PRICE['insta_info4_1'],
     insta5: LEXICON_PRICE['insta_info5'],
 }
 

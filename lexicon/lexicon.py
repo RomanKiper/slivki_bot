@@ -1,7 +1,6 @@
 LEXICON_COMMANDS: dict[str, str] = {
     '/start': 'ГЛАВНОЕ МЕНЮ',
     '/admin': 'АДМИНКА',
-    '/help': 'ПОМОЩЬ',
 }
 
 LEXICON_HI = {"привет", "здорова", "хай", "приветствую", "добрый день", "здравствуйте", "здрасти", "hi", "hello",
@@ -110,16 +109,8 @@ LEXICON_btn_main_menu: dict[str, str] = {
         "ЦЕНЫ/СТАТИСТИКА🤑💵": "price_statistic",
         "О НАС": "about",
         "FAQ🤯": "faq_main",
-        "БЛОГЕРЫ👩‍🎤": "blogers-main",
         "ССЫЛКИ🔗": "links_main",
         "КОНТАКТЫ": "contacts_main",
-        "ПРЕЗЕНТАЦИЯ🎁": "presentation_main",
-    }
-
-LEXICON_btn_help: dict[str, str] = {
-        "Инструкция для админки📄": "adm_panel_instruction",
-        "Связь с администратором📞": "adm_connect",
-        "Общая информация🪬": "main_information",
     }
 
 
@@ -179,7 +170,6 @@ LEXICON_btn_price_statistic: dict[str, str] = {
         'TIKTOK': 'tiktok_sl',
         'ПРИЛОЖЕНИЕ': 'app_advertising',
         'РЕГИОНЫ': 'regions_sl',
-        'ОБЗОРЫ/ПРИМЕРЫ': 'reviews',
         'НАЗАД В МЕНЮ': 'main_menu',
     }
 
@@ -244,7 +234,7 @@ LEXICON_btn_reviews: dict[str, str] = {
 LEXICON_PRICE: dict[str, str] = {
     'photo_telejka': 'AgACAgIAAxkBAAIqUmZiGnmOViRLmCcrRj-SuY9-j5cGAAI63DEbZGYRS466NWoZIJXqAQADAgADcwADNQQ',
     'telejka_info': '<b>Пост в телеграм канале Скидки Беларуси.</b>\n'
-                    '✅Количество подписчиков - 46 000.\n'
+                    '✅Количество подписчиков - 49 500.\n'
                     '✅Количество просмотров - более 10 000.\n\n'
                     '💵1 выход - 798 руб.\n'
                     '<a href="https://t.me/slivki_by">Ссылка на telegram</a>\n',
@@ -329,6 +319,7 @@ LEXICON_PRICE: dict[str, str] = {
     'insta2': 'AgACAgIAAxkBAAIqdWZiHgwkdsx-J4LBXyFxTDk7j2zPAAJH3DEbZGYRS8nzP9XL0BEqAQADAgADcwADNQQ',
     'insta3': 'AgACAgIAAxkBAAIqeGZiHhZ-q-krkck5XMUIkDCVWT5WAAJI3DEbZGYRS5a9HalMG2GNAQADAgADcwADNQQ',
     'insta4': 'AgACAgIAAxkBAAIqe2ZiHiAu_06FlENjHAclICaIwrE_AAJJ3DEbZGYRSy-WDZvncz0KAQADAgADcwADNQQ',
+    'insta4_1': 'AgACAgIAAxkBAAI5-WbeCnne0_wsd-6_glnXcfxj283zAAJ83jEb6vPwSpMjw72eaPskAQADAgADcwADNgQ',
     'insta5': 'AgACAgIAAxkBAAIqfmZiHipUsdXmRM-SCVu0erWug0FLAAJL3DEbZGYRS5GanEt3ykRJAQADAgADcwADNQQ',
     'insta_info1': '<b>Cеть инстаграм Сливки бай:</b>\n'
                   '✅Больше 700 000 подписчиков.\n'
@@ -337,13 +328,14 @@ LEXICON_PRICE: dict[str, str] = {
                   '✅250 000+ пользователей смотрят Reels-видео.\n'
                   '✅55 000+ просмотров видеоистории в сутки.\n'
                   '✅3 основных канала:\n'
-                  'Канал - slivkiby (375 000 подписчиков).\n'
-                  'Канал giperspros (108 000 подписчиков).\n'
+                  'Канал - slivkiby (400 000 подписчиков).\n'
+                  'Канал giperspros (120 000 подписчиков).\n'
+                  'Канал akcii_skidki_belarus (130 000 подписчиков).\n'
                   'Канал slivkiby_beauty (23 300 подписчиков).\n'
                   '✅11 региональных каналов.\n'
                   'Все каналы /insta_links',
     'insta_info2': '<b>Основной канал slivkiby.</b>\n'
-                   '✅375 000 подписчиков.\n'
+                   '✅400 000 подписчиков.\n'
                    '✅200 000+ охват поста в ленте.\n'
                    '✅55 000+ просмотров видеоистории в сутки.\n'
                    '<a href="https://www.instagram.com/slivkiby/">www.instagram.com/slivkiby/</a>\n'
@@ -352,7 +344,7 @@ LEXICON_PRICE: dict[str, str] = {
                    '💵Пост(рилс) - 2998 руб.\n'
                    '💵Пост + Видеообзор - 3998 руб.\n',
     'insta_info3': '<b>Канал giperspros.</b>\n'
-                   '✅108 000 подписчиков.\n'
+                   '✅120 000 подписчиков.\n'
                    '✅70 000+ охват поста в ленте.\n'
                    '✅40 000+ просмотров видеоистории в сутки.\n'
                    '<a href="https://www.instagram.com/giperspros/">www.instagram.com/giperspros/</a>\n'
@@ -369,6 +361,15 @@ LEXICON_PRICE: dict[str, str] = {
                    '💵Видеообзор(сторис 24 ч.) - 398 руб.\n'
                    '💵Пост(рилс) - 598 руб.\n'
                    '💵Пост + Видеообзор - 798 руб.\n',
+    'insta_info4_1': '<b>akcii_skidki_belarus.</b>\n'
+                   '✅130 000 подписчиков.\n'
+                   '✅50 000+ охват поста в ленте.\n'
+                   '✅30 000+ просмотров видеоистории в сутки.\n'
+                   '<a href="https://www.instagram.com/akcii_skidki_belarus/">www.instagram.com/akcii_skidki_belarus/</a>\n'
+                   'Стоимость размещения:\n'
+                   '💵Видеообзор(сторис 24 ч.) - 498 руб.\n'
+                   '💵Пост(рилс) - 598 руб.\n'
+                   '💵Пост + Видеообзор - 998 руб.\n',
     'insta_info5': '<b>Розыгрыши в Instagram.</b>\n'
                     'В любом из каналов могут быть проведены розыгрыши.\n'
                     'В зависимости от тематики, условий розыгрыша, ценности приза, количество '
